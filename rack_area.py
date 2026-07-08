@@ -154,32 +154,16 @@ class RackArea:
         x2 = L["W"] - L["PAD_X"]
         y2 = y1 + L["SHELL_H"]
 
-        c.create_rectangle(x1+3, y1+3, x2+3, y2+3,
-                            fill="#0a0e14", outline="", tags="rack_bg")
+        # Outer shell body — no border/shadow on any of the 4 sides
+        # (top strip, left/right rails, and drop-shadow all removed).
         c.create_rectangle(x1, y1, x2, y2,
                             fill=T["rack_shell_bot"],
-                            outline=T["rack_shell_top"],
-                            width=2, tags="rack_bg")
+                            outline="",
+                            width=0, tags="rack_bg")
         c.create_rectangle(x1+6, y1+6, x2-6, y2-6,
                             fill=T["rack_row"],
                             outline="#0a0f18",
                             width=1, tags="rack_bg")
-        c.create_rectangle(x1, y1, x2, y1+4,
-                            fill="#2a3a50", outline="", tags="rack_bg")
-
-        for ex, ew in [(x1, 12), (x2 - 12, 12)]:
-            c.create_rectangle(ex, y1+10, ex+ew, y2-10,
-                                fill="#1a2535",
-                                outline="#0a1020",
-                                width=1, tags="rack_bg")
-            for sy in [y1+20, y1+40, y2-40, y2-20]:
-                c.create_oval(ex+2, sy-4, ex+10, sy+4,
-                              fill="#0a1020",
-                              outline=T["rack_screw"],
-                              width=1, tags="rack_bg")
-                cx = ex + 6
-                c.create_line(cx-2, sy, cx+2, sy, fill=T["rack_screw"], tags="rack_bg")
-                c.create_line(cx, sy-2, cx, sy+2, fill=T["rack_screw"], tags="rack_bg")
 
     # ── Slot number headers ─────────────────────────────────────────
 
@@ -355,7 +339,7 @@ class RackArea:
 
                 photo = ImageTk.PhotoImage(img)
                 c.create_rectangle(x1, y1, x2, top_end,
-                                   fill="#0a0e14", outline="#1e3050", width=1)
+                                   fill="#0a0e14", outline="", tags="rack_bg")
                 c.create_image(x1, y1, image=photo, anchor="nw")
                 self._psm_top_photo = photo   # keep reference alive
                 loaded = True
@@ -407,7 +391,7 @@ class RackArea:
 
                 photo = ImageTk.PhotoImage(img)
                 c.create_rectangle(x1, top_end + 2, x2, bot_st - 2,
-                                   fill="#0a0e14", outline="#1e3050", width=1)
+                                   fill="#0a0e14", outline="", tags="rack_bg")
                 c.create_image(x1, top_end + 2, image=photo, anchor="nw")
                 self._psm_middle_photo = photo   # keep reference alive
                 loaded = True
@@ -417,7 +401,7 @@ class RackArea:
         if not loaded:
             # Fallback: dark background
             c.create_rectangle(x1, top_end + 2, x2, bot_st - 2,
-                               fill="#0d1a28", outline="#1e3050", width=1)
+                               fill="#0d1a28", outline="", tags="rack_bg")
 
     # ── BOTTOM PSM / CPU panel — Powersupply.jpg image, stretch-filled ───────
 
@@ -458,7 +442,7 @@ class RackArea:
 
                 photo = ImageTk.PhotoImage(img)
                 c.create_rectangle(x1, bot_st, x2, y2,
-                                   fill="#0a0e14", outline="#1e3050", width=1)
+                                   fill="#0a0e14", outline="", tags="rack_bg")
                 c.create_image(x1, bot_st, image=photo, anchor="nw")
                 self._psm_bottom_photo = photo   # keep reference alive
                 loaded = True
@@ -576,12 +560,6 @@ class RackArea:
         card_w = max(1, sx2 - sx1)
         card_h = max(1, sy2 - sy1)
 
-        # Always show default appearance - removed disabled gray state
-        if is_sel:
-            border_col = "#f0b040"  # Amber for selected
-        else:
-            border_col = "#1e3050"  # Normal
-
         # ── Locate Measurement_Module.jpg ────────────────────────────
         base_dir = os.path.dirname(os.path.abspath(__file__))
         candidates = [
@@ -621,10 +599,11 @@ class RackArea:
 
                 photo = ImageTk.PhotoImage(img)
                 # Dark background (only visible if image somehow doesn't
-                # fully cover due to rounding — kept as a safety net)
+                # fully cover due to rounding — kept as a safety net).
+                # No outline here — the border-less look is intentional.
                 c.create_rectangle(sx1, sy1, sx2, sy2,
-                                   fill="#0a0e14", outline=border_col,
-                                   width=1, tags=tag)
+                                   fill="#0a0e14", outline="",
+                                   width=0, tags=tag)
                 c.create_image(ox, oy, image=photo, anchor="nw", tags=tag)
                 self._module_images[key] = photo
                 loaded = True
@@ -634,8 +613,8 @@ class RackArea:
         if not loaded:
             # Fallback
             c.create_rectangle(sx1, sy1, sx2, sy2,
-                               fill="#1a4fa0", outline="#0a2f60",
-                               width=2, tags=tag)
+                               fill="#1a4fa0", outline="",
+                               width=0, tags=tag)
             mx = (sx1 + sx2) // 2
             my = (sy1 + sy2) // 2
             c.create_text(mx, my - 8,
@@ -649,7 +628,7 @@ class RackArea:
                           font=tkfont.Font(family="Segoe UI", size=7),
                           anchor="center", tags=tag)
 
-        # ── Selection border only - removed disabled gray border ──────────
+        # ── Selection border only (amber) — no blue border in any state ──
         if is_sel:
             c.create_rectangle(sx1, sy1, sx2, sy2,
                                fill="", outline="#f0b040",
@@ -734,7 +713,7 @@ class RackArea:
         # Bottom thin bar
         c.create_rectangle(sx1 + 4, sy2 - 6, sx2 - 4, sy2 - 2,
                             fill="#0a1520",
-                            outline="#1e3050",
+                            outline="",
                             tags=tag)
 
         c.tag_bind(tag, "<Enter>",
@@ -768,12 +747,6 @@ class RackArea:
         slot_w = max(1, sx2 - sx1)
         slot_h = max(1, sy2 - sy1)
 
-        # Always show default appearance - removed disabled gray state
-        if is_sel:
-            border_col = "#f0b040"  # Amber for selected
-        else:
-            border_col = "#1e3050"  # Normal
-
         base_dir = os.path.dirname(os.path.abspath(__file__))
         candidates = [
             os.path.join(base_dir, 'src', 'images', 'VMM-6M.jpg'),
@@ -800,9 +773,10 @@ class RackArea:
                 oy = sy1
 
                 photo = ImageTk.PhotoImage(img)
+                # No outline — border-less card in all states.
                 c.create_rectangle(sx1, sy1, sx2, sy2,
-                                   fill="#0a0e14", outline=border_col,
-                                   width=1, tags=tag)
+                                   fill="#0a0e14", outline="",
+                                   width=0, tags=tag)
                 c.create_image(ox, oy, image=photo, anchor="nw", tags=tag)
                 self._module_images[key] = photo
                 loaded = True
@@ -811,15 +785,15 @@ class RackArea:
 
         if not loaded:
             c.create_rectangle(sx1, sy1, sx2, sy2,
-                               fill="#1a4fa0", outline=border_col,
-                               width=2, tags=tag)
+                               fill="#1a4fa0", outline="",
+                               width=0, tags=tag)
             c.create_text((sx1 + sx2) // 2, (sy1 + sy2) // 2,
                           text="VMM-6M",
                           fill="#ffffff",
                           font=tkfont.Font(family="Segoe UI", size=8, weight="bold"),
                           anchor="center", tags=tag)
 
-        # Selection border only - removed disabled gray border
+        # Selection border only (amber) — no blue border in any state
         if is_sel:
             c.create_rectangle(sx1, sy1, sx2, sy2,
                                fill="", outline="#f0b040",
@@ -851,12 +825,6 @@ class RackArea:
         slot_w = max(1, sx2 - sx1)
         slot_h = max(1, sy2 - sy1)
 
-        # Always show default appearance - removed disabled gray state
-        if is_sel:
-            border_col = "#f0b040"  # Amber for selected
-        else:
-            border_col = "#1e3050"  # Normal
-
         base_dir = os.path.dirname(os.path.abspath(__file__))
         candidates = [
             os.path.join(base_dir, 'src', 'images', 'Relay_Module.jpg'),
@@ -882,9 +850,10 @@ class RackArea:
                 oy = sy1
 
                 photo = ImageTk.PhotoImage(img)
+                # No outline — border-less card in all states.
                 c.create_rectangle(sx1, sy1, sx2, sy2,
-                                   fill="#0a0e14", outline=border_col,
-                                   width=1, tags=tag)
+                                   fill="#0a0e14", outline="",
+                                   width=0, tags=tag)
                 c.create_image(ox, oy, image=photo, anchor="nw", tags=tag)
                 self._module_images[key] = photo
                 loaded = True
@@ -893,15 +862,15 @@ class RackArea:
 
         if not loaded:
             c.create_rectangle(sx1, sy1, sx2, sy2,
-                               fill="#1a4fa0", outline=border_col,
-                               width=2, tags=tag)
+                               fill="#1a4fa0", outline="",
+                               width=0, tags=tag)
             c.create_text((sx1 + sx2) // 2, (sy1 + sy2) // 2,
                           text="3000/RLY",
                           fill="#ffffff",
                           font=tkfont.Font(family="Segoe UI", size=8, weight="bold"),
                           anchor="center", tags=tag)
 
-        # Selection border only - removed disabled gray border
+        # Selection border only (amber) — no blue border in any state
         if is_sel:
             c.create_rectangle(sx1, sy1, sx2, sy2,
                                fill="", outline="#f0b040",
