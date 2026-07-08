@@ -19,6 +19,7 @@ from PIL import Image, ImageTk
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
 from popups.configuration_settings import ConfigurationSettingsPopup
 from popups.monitors import ModuleSelectionPopup
+from popups.module_switch_confirmation import ModuleSwitchConfirmationPopup
 from snapshot.racksnapshot import get_module_config, is_image_display_module
 
 SLOT_COUNT = 12
@@ -129,7 +130,6 @@ class RackArea:
         self._draw_rack_shell(c, L)
         self._draw_slot_headers(c, L)
         self._draw_psm_top(c, L)
-        self._draw_psm_middle(c, L)
         self._draw_psm_bottom(c, L)
 
         skip_next = False
@@ -318,11 +318,12 @@ class RackArea:
         (img.resize to (panel_w, panel_h), no aspect-ratio letterboxing,
         no cropping). Falls back to the original hand-drawn PSM panel
         graphic if the image file can't be found/loaded.
+        Extended height to include middle strip area (45% -> 55%).
         """
         x1      = L["PAD_X"] + 14
         y1      = L["TOP_Y"] + 2
         x2      = x1 + L["PSM_W"] - 4
-        top_end = L["TOP_Y"] + int(L["SHELL_H"] * 0.45)
+        top_end = L["TOP_Y"] + int(L["SHELL_H"] * 0.50)  # 50% to match bottom
 
         panel_w = max(1, x2 - x1)
         panel_h = max(1, top_end - y1)
@@ -361,153 +362,181 @@ class RackArea:
             # Fallback: original hand-drawn panel
             self._draw_psm_panel(c, L, x1, y1, x2, top_end, "VMS-3000 PSM")
 
-    # ── MIDDLE strip ────────────────────────────────────────────────
+    # ── MIDDLE strip — Powersupply.jpg image, stretch-filled ─────────────
 
     def _draw_psm_middle(self, c: tk.Canvas, L: dict):
+        """
+        Column 0 (PSM) middle strip. Loads src/images/Powersupply.jpg and
+        stretch-fills it into the strip's exact pixel bounds — the same
+        STRETCH-FILL technique used for the top and bottom PSM panels.
+        """
         x1      = L["PAD_X"] + 14
         x2      = x1 + L["PSM_W"] - 4
-        mx      = (x1 + x2) // 2
         top_end = L["TOP_Y"] + int(L["SHELL_H"] * 0.45)
         bot_st  = L["TOP_Y"] + int(L["SHELL_H"] * 0.55)
         if bot_st - top_end < 10:
             bot_st = top_end + 10
 
-        c.create_rectangle(x1, top_end + 2, x2, bot_st - 2,
-                           fill="#0d1a28", outline="#1e3050", width=1)
+        panel_w = max(1, x2 - x1)
+        panel_h = max(1, bot_st - top_end)
 
-        strip_h = bot_st - top_end
-        mid_y   = top_end + strip_h // 2
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        candidates = [
+            os.path.join(base_dir, 'src', 'images', 'Powersupply.jpg'),
+            os.path.join(base_dir, 'images', 'Powersupply.jpg'),
+            os.path.join(base_dir, 'Powersupply.jpg'),
+            os.path.join(base_dir, 'src', 'Powersupply.jpg'),
+        ]
+        img_path = next((p for p in candidates if os.path.isfile(p)), None)
 
-        nso_x1 = x1 + 6
-        nso_x2 = nso_x1 + 22
-        nso_y1 = top_end + 5
-        nso_y2 = nso_y1 + 12
-        c.create_rectangle(nso_x1, nso_y1, nso_x2, nso_y2,
-                           fill="#1a3a5a", outline="#3a6a9a", width=1)
-        c.create_text((nso_x1 + nso_x2) // 2, (nso_y1 + nso_y2) // 2,
-                      text="NSO",
-                      font=tkfont.Font(family="Courier New", size=5, weight="bold"),
-                      fill="#ffffff", anchor="center")
+        if not hasattr(self, '_psm_middle_photo'):
+            self._psm_middle_photo = None
 
-        run_led_x = nso_x2 + 8
-        run_led_y = nso_y1 + 1
-        c.create_text(run_led_x, run_led_y,
-                      text="▲",
-                      font=tkfont.Font(family="Segoe UI", size=6),
-                      fill="#00ff40", anchor="nw")
-        c.create_text(run_led_x, run_led_y + 8,
-                      text="RUN",
-                      font=tkfont.Font(family="Courier New", size=5),
-                      fill="#00cc30", anchor="nw")
+        loaded = False
+        if img_path:
+            try:
+                img = Image.open(img_path).convert("RGB")
 
-        knob_r  = min(14, strip_h // 2 - 4)
-        knob_cx = mx
-        knob_cy = mid_y + 4
-        c.create_oval(knob_cx - knob_r - 2, knob_cy - knob_r - 2,
-                      knob_cx + knob_r + 2, knob_cy + knob_r + 2,
-                      fill="#0a1520", outline="#2a4a6a", width=2)
-        c.create_oval(knob_cx - knob_r, knob_cy - knob_r,
-                      knob_cx + knob_r, knob_cy + knob_r,
-                      fill="#1a3050", outline="#3a6090", width=1)
-        c.create_oval(knob_cx - knob_r + 3, knob_cy - knob_r + 3,
-                      knob_cx + knob_r - 3, knob_cy + knob_r - 3,
-                      fill="#243c5a", outline="#4a7aaa", width=1)
-        c.create_oval(knob_cx - 3, knob_cy - 3,
-                      knob_cx + 3, knob_cy + 3,
-                      fill="#6aaad0", outline="")
-        c.create_line(knob_cx, knob_cy - knob_r + 2,
-                      knob_cx, knob_cy - knob_r + 6,
-                      fill="#ffffff", width=2)
+                # STRETCH-FILL: resize directly to the strip's exact pixel
+                # size, same treatment as top and bottom PSM panels.
+                img = img.resize((panel_w, panel_h), Image.Resampling.LANCZOS)
 
-        c.create_text(knob_cx, knob_cy + knob_r + 5,
-                      text="PROG",
-                      font=tkfont.Font(family="Courier New", size=5),
-                      fill="#6a9aba",
-                      anchor="center")
+                photo = ImageTk.PhotoImage(img)
+                c.create_rectangle(x1, top_end + 2, x2, bot_st - 2,
+                                   fill="#0a0e14", outline="#1e3050", width=1)
+                c.create_image(x1, top_end + 2, image=photo, anchor="nw")
+                self._psm_middle_photo = photo   # keep reference alive
+                loaded = True
+            except Exception:
+                pass
 
-    # ── BOTTOM PSM / CPU panel ──────────────────────────────────────
+        if not loaded:
+            # Fallback: dark background
+            c.create_rectangle(x1, top_end + 2, x2, bot_st - 2,
+                               fill="#0d1a28", outline="#1e3050", width=1)
+
+    # ── BOTTOM PSM / CPU panel — Powersupply.jpg image, stretch-filled ───────
 
     def _draw_psm_bottom(self, c: tk.Canvas, L: dict):
+        """
+        Column 0 (PSM) bottom panel. Loads src/images/Powersupply.jpg and
+        stretch-fills it into the panel's exact pixel bounds — the same
+        STRETCH-FILL technique used for the top PSM panel and module cards.
+        """
         x1    = L["PAD_X"] + 14
         x2    = x1 + L["PSM_W"] - 4
-        mx    = (x1 + x2) // 2
-        bot_st = L["TOP_Y"] + int(L["SHELL_H"] * 0.55)
+        bot_st = L["TOP_Y"] + int(L["SHELL_H"] * 0.50)  # 50% to match top
         y2     = L["TOP_Y"] + L["SHELL_H"] - 12
 
-        content_y = self._draw_psm_panel(c, L, x1, bot_st, x2, y2, "VMS-3000 CPU")
+        panel_w = max(1, x2 - x1)
+        panel_h = max(1, y2 - bot_st)
 
-        box_x1 = x1 + 6
-        box_x2 = x2 - 6
-        box_y1 = content_y
-        box_y2 = box_y1 + 30
-        c.create_rectangle(box_x1, box_y1, box_x2, box_y2,
-                           fill="#0a1520", outline="#1e3050")
-
-        status_leds = [
-            ("PSM",  T["led_green"],  0, 0),
-            ("TuRn", T["led_amber"],  0, 1),
-            ("TIS",  T["led_red"],    1, 0),
-            ("CMFD", T["led_blue"],   1, 1),
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        candidates = [
+            os.path.join(base_dir, 'src', 'images', 'Powersupply.jpg'),
+            os.path.join(base_dir, 'images', 'Powersupply.jpg'),
+            os.path.join(base_dir, 'Powersupply.jpg'),
+            os.path.join(base_dir, 'src', 'Powersupply.jpg'),
         ]
-        cell_w = (box_x2 - box_x1) // 2
-        cell_h = (box_y2 - box_y1) // 2
-        for lbl, col, row, col_i in status_leds:
-            cx_led = box_x1 + col_i * cell_w + 5
-            cy_led = box_y1 + row  * cell_h + 8
-            c.create_oval(cx_led, cy_led, cx_led+6, cy_led+6,
-                          fill=col, outline="#ffffff", width=1)
-            c.create_text(cx_led + 9, cy_led + 3,
-                          text=lbl,
+        img_path = next((p for p in candidates if os.path.isfile(p)), None)
+
+        if not hasattr(self, '_psm_bottom_photo'):
+            self._psm_bottom_photo = None
+
+        loaded = False
+        if img_path:
+            try:
+                img = Image.open(img_path).convert("RGB")
+
+                # STRETCH-FILL: resize directly to the panel's exact pixel
+                # size, same treatment as top PSM panel and module cards.
+                img = img.resize((panel_w, panel_h), Image.Resampling.LANCZOS)
+
+                photo = ImageTk.PhotoImage(img)
+                c.create_rectangle(x1, bot_st, x2, y2,
+                                   fill="#0a0e14", outline="#1e3050", width=1)
+                c.create_image(x1, bot_st, image=photo, anchor="nw")
+                self._psm_bottom_photo = photo   # keep reference alive
+                loaded = True
+            except Exception:
+                pass
+
+        if not loaded:
+            # Fallback: original hand-drawn panel
+            content_y = self._draw_psm_panel(c, L, x1, bot_st, x2, y2, "VMS-3000 CPU")
+
+            box_x1 = x1 + 6
+            box_x2 = x2 - 6
+            box_y1 = content_y
+            box_y2 = box_y1 + 30
+            c.create_rectangle(box_x1, box_y1, box_x2, box_y2,
+                               fill="#0a1520", outline="#1e3050")
+
+            status_leds = [
+                ("PSM",  T["led_green"],  0, 0),
+                ("TuRn", T["led_amber"],  0, 1),
+                ("TIS",  T["led_red"],    1, 0),
+                ("CMFD", T["led_blue"],   1, 1),
+            ]
+            cell_w = (box_x2 - box_x1) // 2
+            cell_h = (box_y2 - box_y1) // 2
+            for lbl, col, row, col_i in status_leds:
+                cx_led = box_x1 + col_i * cell_w + 5
+                cy_led = box_y1 + row  * cell_h + 8
+                c.create_oval(cx_led, cy_led, cx_led+6, cy_led+6,
+                              fill=col, outline="#ffffff", width=1)
+                c.create_text(cx_led + 9, cy_led + 3,
+                              text=lbl,
+                              font=tkfont.Font(family="Courier New", size=5),
+                              fill="#8ab8d8",
+                              anchor="w")
+
+            run_y = box_y2 + 6
+            c.create_oval(mx-10, run_y, mx+10, run_y+12,
+                          fill="#183018", outline="#1e3050", width=2)
+            c.create_oval(mx-6,  run_y+2, mx+6,  run_y+10,
+                          fill=T["led_green"], outline="#ffffff", width=1)
+            c.create_text(mx, run_y + 18,
+                          text="RUN",
+                          font=tkfont.Font(family="Courier New", size=5, weight="bold"),
+                          fill="#4af04a",
+                          anchor="center")
+
+            db9_y = run_y + 26
+            db9_x1 = mx - 14
+            db9_x2 = mx + 14
+            db9_h  = 18
+            c.create_rectangle(db9_x1, db9_y, db9_x2, db9_y + db9_h,
+                               fill="#1a2a3a", outline="#3a5a7a", width=1)
+            pin_rows = [5, 4]
+            pr_y = db9_y + 4
+            for npins in pin_rows:
+                spacing = (db9_x2 - db9_x1 - 6) / max(npins - 1, 1)
+                for p in range(npins):
+                    px = db9_x1 + 3 + int(p * spacing)
+                    c.create_oval(px, pr_y, px+3, pr_y+3,
+                                  fill="#000000", outline="#5a7a9a", width=1)
+                pr_y += 7
+            c.create_text(mx, db9_y + db9_h + 6,
+                          text="PROG",
                           font=tkfont.Font(family="Courier New", size=5),
-                          fill="#8ab8d8",
-                          anchor="w")
+                          fill="#6a9aba",
+                          anchor="center")
 
-        run_y = box_y2 + 6
-        c.create_oval(mx-10, run_y, mx+10, run_y+12,
-                      fill="#183018", outline="#1e3050", width=2)
-        c.create_oval(mx-6,  run_y+2, mx+6,  run_y+10,
-                      fill=T["led_green"], outline="#ffffff", width=1)
-        c.create_text(mx, run_y + 18,
-                      text="RUN",
-                      font=tkfont.Font(family="Courier New", size=5, weight="bold"),
-                      fill="#4af04a",
-                      anchor="center")
-
-        db9_y = run_y + 26
-        db9_x1 = mx - 14
-        db9_x2 = mx + 14
-        db9_h  = 18
-        c.create_rectangle(db9_x1, db9_y, db9_x2, db9_y + db9_h,
-                           fill="#1a2a3a", outline="#3a5a7a", width=1)
-        pin_rows = [5, 4]
-        pr_y = db9_y + 4
-        for npins in pin_rows:
-            spacing = (db9_x2 - db9_x1 - 6) / max(npins - 1, 1)
-            for p in range(npins):
-                px = db9_x1 + 3 + int(p * spacing)
-                c.create_oval(px, pr_y, px+3, pr_y+3,
-                              fill="#000000", outline="#5a7a9a", width=1)
-            pr_y += 7
-        c.create_text(mx, db9_y + db9_h + 6,
-                      text="PROG",
-                      font=tkfont.Font(family="Courier New", size=5),
-                      fill="#6a9aba",
-                      anchor="center")
-
-        bar_y = db9_y + db9_h + 14
-        bar_x1 = mx - 12
-        bar_x2 = mx + 12
-        bar_h  = 22
-        c.create_rectangle(bar_x1, bar_y, bar_x2, bar_y + bar_h,
-                           fill="#1a0000", outline="#3a0000", width=1)
-        seg_count = 8
-        seg_h = (bar_h - 4) / seg_count
-        for seg in range(seg_count):
-            intensity = "#ff0000" if seg < 5 else "#660000"
-            sy = bar_y + 2 + int(seg * seg_h)
-            c.create_rectangle(bar_x1+3, sy,
-                               bar_x2-3, sy + max(1, int(seg_h)-1),
-                               fill=intensity, outline="")
+            bar_y = db9_y + db9_h + 14
+            bar_x1 = mx - 12
+            bar_x2 = mx + 12
+            bar_h  = 22
+            c.create_rectangle(bar_x1, bar_y, bar_x2, bar_y + bar_h,
+                               fill="#1a0000", outline="#3a0000", width=1)
+            seg_count = 8
+            seg_h = (bar_h - 4) / seg_count
+            for seg in range(seg_count):
+                intensity = "#ff0000" if seg < 5 else "#660000"
+                sy = bar_y + 2 + int(seg * seg_h)
+                c.create_rectangle(bar_x1+3, sy,
+                                   bar_x2-3, sy + max(1, int(seg_h)-1),
+                                   fill=intensity, outline="")
 
     # ══════════════════════════════════════════════════════════════════
     #  3000/12M/DIS — double-wide Measurement Module card
@@ -952,6 +981,29 @@ class RackArea:
 
     def _module_dialog(self, key: str, slot_num: int):
         def on_selection(selection):
+            current_module = self._slot_data.get(key)
+            
+            # If there's already a module and user is switching to a different module
+            # (not "No Modules"), show confirmation popup
+            if current_module and selection != "No Modules" and current_module != selection:
+                def on_switch_confirmed(confirmed):
+                    if confirmed:
+                        if selection == "No Modules":
+                            self._slot_data.pop(key, None)
+                        else:
+                            self._slot_data[key] = selection
+                        self._selected = key
+                        self.draw()
+                        self._hint_var.set(
+                            f"Slot {slot_num} → {self._slot_data.get(key, 'Empty')}"
+                        )
+                
+                popup = ModuleSwitchConfirmationPopup(
+                    self._canvas, self._fonts, current_module, selection, on_switch_confirmed
+                )
+                popup.show()
+                return
+            
             if selection == "No Modules":
                 self._slot_data.pop(key, None)
             else:
