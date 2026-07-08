@@ -192,6 +192,7 @@ class RackArea:
             merged pair, hide N+1 completely.
           • For VMM-6M single slots: normal single-slot number.
           • Selected slot number is dark (#cc2222), unselected is gray (#888888).
+          • Display numbers start from 2 (slots 2-12 display as 2-12).
         """
         skip_next = False
         for i in range(1, SLOT_COUNT + 1):
@@ -210,11 +211,14 @@ class RackArea:
             # Dark color for selected, gray for unselected
             fill_color = "#cc2222" if is_selected else "#888888"
 
+            # Display number: shift by -1 to show 1-11 instead of 2-12
+            display_num = i - 1
+
             if module == DIS_MODULE:
                 # Centre the number over both slots i and i+1
                 cx = L["slot_x0"] + (i - 1 + 1.0) * L["sw"]   # midpoint of pair
                 c.create_text(cx, L["TOP_Y"] - 14,
-                              text=str(i),
+                              text=str(display_num),
                               font=self._fonts["num"],
                               fill=fill_color,
                               anchor="center")
@@ -222,7 +226,7 @@ class RackArea:
             else:
                 cx = L["slot_x0"] + (i - 1 + 0.5) * L["sw"]
                 c.create_text(cx, L["TOP_Y"] - 14,
-                              text=str(i),
+                              text=str(display_num),
                               font=self._fonts["num"],
                               fill=fill_color,
                               anchor="center")
@@ -572,12 +576,9 @@ class RackArea:
         card_w = max(1, sx2 - sx1)
         card_h = max(1, sy2 - sy1)
 
-        # Determine border color based on selection state
-        has_selection = self._selected is not None
+        # Always show default appearance - removed disabled gray state
         if is_sel:
             border_col = "#f0b040"  # Amber for selected
-        elif has_selection:
-            border_col = "#a0a0a0"  # Gray for disabled
         else:
             border_col = "#1e3050"  # Normal
 
@@ -648,15 +649,11 @@ class RackArea:
                           font=tkfont.Font(family="Segoe UI", size=7),
                           anchor="center", tags=tag)
 
-        # ── Selection/disabled border ────────────────────────────────────
+        # ── Selection border only - removed disabled gray border ──────────
         if is_sel:
             c.create_rectangle(sx1, sy1, sx2, sy2,
                                fill="", outline="#f0b040",
                                width=3, tags=tag)
-        elif has_selection:
-            c.create_rectangle(sx1, sy1, sx2, sy2,
-                               fill="", outline="#a0a0a0",
-                               width=2, tags=tag)
 
         # ── Mouse bindings ────────────────────────────────────────────
         c.tag_bind(tag, "<Enter>",
@@ -693,14 +690,10 @@ class RackArea:
         mx  = (sx1 + sx2) // 2
         card_h = sy2 - sy1
 
-        # If any slot is selected, unselected slots appear disabled (grayed out)
-        has_selection = self._selected is not None
+        # Always show default appearance - removed disabled gray state
         if is_sel:
             face_col = T["slot_sel_face"]
             edge_col = T["slot_sel"]
-        elif has_selection:
-            face_col = "#d0d0d0"  # Disabled gray
-            edge_col = "#a0a0a0"  # Disabled border
         else:
             face_col = T["slot_face"]
             edge_col = T["slot_edge_sh"]
@@ -775,12 +768,9 @@ class RackArea:
         slot_w = max(1, sx2 - sx1)
         slot_h = max(1, sy2 - sy1)
 
-        # Determine border color based on selection state
-        has_selection = self._selected is not None
+        # Always show default appearance - removed disabled gray state
         if is_sel:
             border_col = "#f0b040"  # Amber for selected
-        elif has_selection:
-            border_col = "#a0a0a0"  # Gray for disabled
         else:
             border_col = "#1e3050"  # Normal
 
@@ -829,15 +819,11 @@ class RackArea:
                           font=tkfont.Font(family="Segoe UI", size=8, weight="bold"),
                           anchor="center", tags=tag)
 
-        # Selection/disabled border
+        # Selection border only - removed disabled gray border
         if is_sel:
             c.create_rectangle(sx1, sy1, sx2, sy2,
                                fill="", outline="#f0b040",
                                width=3, tags=tag)
-        elif has_selection:
-            c.create_rectangle(sx1, sy1, sx2, sy2,
-                               fill="", outline="#a0a0a0",
-                               width=2, tags=tag)
 
         c.tag_bind(tag, "<Enter>",
                    lambda e, t=tag, k=key: self._hover(t, k, True))
@@ -865,12 +851,9 @@ class RackArea:
         slot_w = max(1, sx2 - sx1)
         slot_h = max(1, sy2 - sy1)
 
-        # Determine border color based on selection state
-        has_selection = self._selected is not None
+        # Always show default appearance - removed disabled gray state
         if is_sel:
             border_col = "#f0b040"  # Amber for selected
-        elif has_selection:
-            border_col = "#a0a0a0"  # Gray for disabled
         else:
             border_col = "#1e3050"  # Normal
 
@@ -918,15 +901,11 @@ class RackArea:
                           font=tkfont.Font(family="Segoe UI", size=8, weight="bold"),
                           anchor="center", tags=tag)
 
-        # Selection/disabled border
+        # Selection border only - removed disabled gray border
         if is_sel:
             c.create_rectangle(sx1, sy1, sx2, sy2,
                                fill="", outline="#f0b040",
                                width=3, tags=tag)
-        elif has_selection:
-            c.create_rectangle(sx1, sy1, sx2, sy2,
-                               fill="", outline="#a0a0a0",
-                               width=2, tags=tag)
 
         c.tag_bind(tag, "<Enter>",
                    lambda e, t=tag, k=key: self._hover(t, k, True))
@@ -942,20 +921,13 @@ class RackArea:
             return
         slot_n   = key.split("_")[1]
         assigned = self._slot_data.get(key)
-        is_image_card = assigned and (
-            is_image_display_module(assigned) or assigned == DIS_MODULE
-            or _is_relay_module(assigned)
-        )
+        # Removed color change logic - rack maintains default appearance
         if entering:
-            if not is_image_card:
-                self._canvas.itemconfig(tag, fill="#2563eb")
             self._hint_var.set(
                 f"Slot {slot_n}  —  "
                 + (f"Module: {assigned}" if assigned else "Empty — click to assign module")
             )
         else:
-            if not is_image_card:
-                self._canvas.itemconfig(tag, fill=T["slot_face"])
             self._hint_var.set("Click any slot to assign module")
 
     def _click(self, key: str, slot_num: int):
