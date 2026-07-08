@@ -158,4 +158,4 @@ class AlarmInhibitWindow(QWidget):
             self.status_label.setText("Status: Please connect first")
             return False
         return True
-        return True
+       
