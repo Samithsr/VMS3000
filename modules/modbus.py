@@ -15,4 +15,4 @@ class ModbusClient:
         return self.client.read_holding_registers(address, count, slave=slave)
     
     def write_register(self, address, value, slave=15):
-        return self.client.write_register(address, value, slave=slave)
+        return self.client.write_register(address, value, slave=slave) 

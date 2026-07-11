@@ -4,7 +4,6 @@ from theme import T
 import sys
 import os
 import math
-import traceback
 from PIL import Image, ImageTk
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
@@ -34,67 +33,6 @@ def _is_relay_module(module: str) -> bool:
         return True
     upper = module.upper()
     return "RLY" in upper or "RELAY" in upper
-
-
-def _find_image_case_insensitive(base_dir, filename, subfolders):
-    """
-    Search a list of subfolders (relative to base_dir) for `filename`,
-    ignoring case. Returns the first match found on disk, or None.
-
-    subfolders: list of tuples, e.g. [('src', 'images'), ('images',), ()]
-    An empty tuple () means "look directly in base_dir".
-    """
-    target = filename.lower()
-    for sub in subfolders:
-        folder = os.path.join(base_dir, *sub) if sub else base_dir
-        if not os.path.isdir(folder):
-            continue
-        try:
-            entries = os.listdir(folder)
-        except OSError:
-            continue
-        for f in entries:
-            if f.lower() == target:
-                return os.path.join(folder, f)
-    return None
-
-
-def _load_photo(base_dir, filename, target_w, target_h, label=""):
-    import traceback
-    from PIL import Image, ImageTk
-    import os
-
-    img_path = os.path.join(base_dir, "src", "images", filename)
-
-    print(f"Loading image from: {img_path}")
-
-    if not os.path.exists(img_path):
-        print(f"Image not found: {img_path}")
-        return None
-
-    try:
-        img = Image.open(img_path).convert("RGB")
-
-        # Convert float to int
-        target_w = int(round(target_w))
-        target_h = int(round(target_h))
-
-        if target_w < 1:
-            target_w = 1
-        if target_h < 1:
-            target_h = 1
-
-        img = img.resize((target_w, target_h), Image.Resampling.LANCZOS)
-
-        photo = ImageTk.PhotoImage(img)
-
-        print(f"Loaded {filename} ({target_w} x {target_h})")
-
-        return photo
-
-    except Exception:
-        traceback.print_exc()
-        return None
 
 
 class RackArea:
@@ -250,7 +188,7 @@ class RackArea:
                               fill=fill_color,
                               anchor="center")
 
-    # ── Helper: draw one PSM panel (fallback, hand-drawn) ────────────
+    # ── Helper: draw one PSM panel ──────────────────────────────────
 
     def _draw_psm_panel(self, c: tk.Canvas, L: dict,
                         px1: int, py1: int, px2: int, py2: int,
@@ -343,17 +281,32 @@ class RackArea:
         panel_h = max(1, top_end - y1)
 
         base_dir = os.path.dirname(os.path.abspath(__file__))
-        photo = _load_photo(base_dir, "Powersupply.jpg", panel_w, panel_h, label="PSM top")
+        candidates = [
+            os.path.join(base_dir, 'src', 'images', 'Powersupply.jpg'),
+            os.path.join(base_dir, 'images', 'Powersupply.jpg'),
+            os.path.join(base_dir, 'Powersupply.jpg'),
+            os.path.join(base_dir, 'src', 'Powersupply.jpg'),
+        ]
+        img_path = next((p for p in candidates if os.path.isfile(p)), None)
 
         if not hasattr(self, '_psm_top_photo'):
             self._psm_top_photo = None
 
-        if photo is not None:
-            c.create_rectangle(x1, y1, x2, top_end,
-                               fill="#0a0e14", outline="", tags="rack_bg")
-            c.create_image(x1, y1, image=photo, anchor="nw")
-            self._psm_top_photo = photo
-        else:
+        loaded = False
+        if img_path:
+            try:
+                img = Image.open(img_path).convert("RGB")
+                img = img.resize((panel_w, panel_h), Image.Resampling.LANCZOS)
+                photo = ImageTk.PhotoImage(img)
+                c.create_rectangle(x1, y1, x2, top_end,
+                                   fill="#0a0e14", outline="", tags="rack_bg")
+                c.create_image(x1, y1, image=photo, anchor="nw")
+                self._psm_top_photo = photo
+                loaded = True
+            except Exception:
+                pass
+
+        if not loaded:
             self._draw_psm_panel(c, L, x1, y1, x2, top_end, "VMS-3000 PSM")
 
     # ── MIDDLE strip — Powersupply.jpg image, stretch-filled ─────────────
@@ -370,17 +323,32 @@ class RackArea:
         panel_h = max(1, bot_st - top_end)
 
         base_dir = os.path.dirname(os.path.abspath(__file__))
-        photo = _load_photo(base_dir, "Configuration_Module.jpg", panel_w, panel_h, label="PSM middle")
+        candidates = [
+            os.path.join(base_dir, 'src', 'images', 'Powersupply.jpg'),
+            os.path.join(base_dir, 'images', 'Powersupply.jpg'),
+            os.path.join(base_dir, 'Powersupply.jpg'),
+            os.path.join(base_dir, 'src', 'Powersupply.jpg'),
+        ]
+        img_path = next((p for p in candidates if os.path.isfile(p)), None)
 
         if not hasattr(self, '_psm_middle_photo'):
             self._psm_middle_photo = None
 
-        if photo is not None:
-            c.create_rectangle(x1, top_end + 2, x2, bot_st - 2,
-                               fill="#0a0e14", outline="", tags="rack_bg")
-            c.create_image(x1, top_end + 2, image=photo, anchor="nw")
-            self._psm_middle_photo = photo
-        else:
+        loaded = False
+        if img_path:
+            try:
+                img = Image.open(img_path).convert("RGB")
+                img = img.resize((panel_w, panel_h), Image.Resampling.LANCZOS)
+                photo = ImageTk.PhotoImage(img)
+                c.create_rectangle(x1, top_end + 2, x2, bot_st - 2,
+                                   fill="#0a0e14", outline="", tags="rack_bg")
+                c.create_image(x1, top_end + 2, image=photo, anchor="nw")
+                self._psm_middle_photo = photo
+                loaded = True
+            except Exception:
+                pass
+
+        if not loaded:
             c.create_rectangle(x1, top_end + 2, x2, bot_st - 2,
                                fill="#0d1a28", outline="", tags="rack_bg")
 
@@ -396,17 +364,32 @@ class RackArea:
         panel_h = max(1, y2 - bot_st)
 
         base_dir = os.path.dirname(os.path.abspath(__file__))
-        photo = _load_photo(base_dir, "Powersupply.jpg", panel_w, panel_h, label="PSM bottom")
+        candidates = [
+            os.path.join(base_dir, 'src', 'images', 'Powersupply.jpg'),
+            os.path.join(base_dir, 'images', 'Powersupply.jpg'),
+            os.path.join(base_dir, 'Powersupply.jpg'),
+            os.path.join(base_dir, 'src', 'Powersupply.jpg'),
+        ]
+        img_path = next((p for p in candidates if os.path.isfile(p)), None)
 
         if not hasattr(self, '_psm_bottom_photo'):
             self._psm_bottom_photo = None
 
-        if photo is not None:
-            c.create_rectangle(x1, bot_st, x2, y2,
-                               fill="#0a0e14", outline="", tags="rack_bg")
-            c.create_image(x1, bot_st, image=photo, anchor="nw")
-            self._psm_bottom_photo = photo
-        else:
+        loaded = False
+        if img_path:
+            try:
+                img = Image.open(img_path).convert("RGB")
+                img = img.resize((panel_w, panel_h), Image.Resampling.LANCZOS)
+                photo = ImageTk.PhotoImage(img)
+                c.create_rectangle(x1, bot_st, x2, y2,
+                                   fill="#0a0e14", outline="", tags="rack_bg")
+                c.create_image(x1, bot_st, image=photo, anchor="nw")
+                self._psm_bottom_photo = photo
+                loaded = True
+            except Exception:
+                pass
+
+        if not loaded:
             content_y = self._draw_psm_panel(c, L, x1, bot_st, x2, y2, "VMS-3000 CPU")
 
             box_x1 = x1 + 6
@@ -503,20 +486,41 @@ class RackArea:
         card_h = max(1, sy2 - sy1)
 
         base_dir = os.path.dirname(os.path.abspath(__file__))
+        candidates = [
+            os.path.join(base_dir, 'src', 'images', 'Measurement_Module.jpg'),
+            os.path.join(base_dir, 'images', 'Measurement_Module.jpg'),
+            os.path.join(base_dir, 'Measurement_Module.jpg'),
+            os.path.join(base_dir, 'src', 'Measurement_Module.jpg'),
+            os.path.join(base_dir, 'src', 'images', '1782708952514_Measurement_Module.jpg'),
+            os.path.join(base_dir, 'images', '1782708952514_Measurement_Module.jpg'),
+            os.path.join(base_dir, '1782708952514_Measurement_Module.jpg'),
+        ]
 
         if not hasattr(self, '_module_images'):
             self._module_images = {}
 
-        photo = _load_photo(base_dir, "Measurement_Module.jpg", card_w, card_h,
-                             label=f"DIS module slot {slot_num}")
+        img_path = None
+        for p in candidates:
+            if os.path.isfile(p):
+                img_path = p
+                break
 
-        if photo is not None:
-            c.create_rectangle(sx1, sy1, sx2, sy2,
-                               fill="#0a0e14", outline="",
-                               width=0, tags=tag)
-            c.create_image(sx1, sy1, image=photo, anchor="nw", tags=tag)
-            self._module_images[key] = photo
-        else:
+        loaded = False
+        if img_path:
+            try:
+                img    = Image.open(img_path).convert("RGB")
+                img = img.resize((card_w, card_h), Image.Resampling.LANCZOS)
+                photo = ImageTk.PhotoImage(img)
+                c.create_rectangle(sx1, sy1, sx2, sy2,
+                                   fill="#0a0e14", outline="",
+                                   width=0, tags=tag)
+                c.create_image(sx1, sy1, image=photo, anchor="nw", tags=tag)
+                self._module_images[key] = photo
+                loaded = True
+            except Exception:
+                pass
+
+        if not loaded:
             c.create_rectangle(sx1, sy1, sx2, sy2,
                                fill="#1a4fa0", outline="",
                                width=0, tags=tag)
@@ -567,80 +571,49 @@ class RackArea:
         sx2 = sx1 + sw - 6
         sy1 = L["TOP_Y"] + 2
         sy2 = L["TOP_Y"] + L["SHELL_H"] - 12
-        slot_w = max(1, sx2 - sx1)
-        slot_h = max(1, sy2 - sy1)
         mx  = (sx1 + sx2) // 2
 
-        base_dir = os.path.dirname(os.path.abspath(__file__))
-
-        if not hasattr(self, '_no_module_images'):
-            self._no_module_images = {}
-
-        # Slot 1 is the fixed Configuration/status panel (RUN dial, DB9 port,
-        # DIP switches, LEDs) — it never shows the generic empty-slot
-        # placeholder, it always shows Configuration_Module.jpg, matching
-        # the physical rack.
-        if slot_num == 1:
-            photo = _load_photo(base_dir, "Configuration_Module.jpg", slot_w, slot_h,
-                                 label=f"configuration panel slot {slot_num}")
-        else:
-            photo = _load_photo(base_dir, "NO_Module.jpg", slot_w, slot_h,
-                                 label=f"empty slot {slot_num}")
-
-        if photo is not None:
-            # Draw image directly without black background
-            c.create_image(sx1, sy1, image=photo, anchor="nw", tags=tag)
-            # Store reference to prevent garbage collection
-            self._no_module_images[key] = photo
-        else:
-            # Fallback to original blue rectangle if image fails to load
-            if is_sel:
-                face_col = T["slot_sel_face"]
-                edge_col = T["slot_sel"]
-            else:
-                face_col = T["slot_face"]
-                edge_col = T["slot_edge_sh"]
-
-            c.create_rectangle(sx1, sy1, sx2, sy2,
-                                fill=face_col,
-                                outline=edge_col,
-                                width=2,
-                                tags=tag)
-
-            cap_w = 22
-            cap_h = 8
-            c.create_rectangle(mx - cap_w // 2, sy1 + 8,
-                                mx + cap_w // 2, sy1 + 8 + cap_h,
-                                fill=T["slot_cap"] if not is_sel else "#fde68a",
-                                outline=edge_col,
-                                width=1, tags=tag)
-
-            panel_y1 = sy1 + 8 + cap_h + 8
-            panel_y2 = sy2 - 10
-            c.create_rectangle(sx1 + 6, panel_y1, sx2 - 6, panel_y2,
-                                fill=face_col,
-                                outline=edge_col,
-                                width=1, tags=tag)
-
-            if module:
-                short = module.split()[0]
-                c.create_text(mx, (panel_y1 + panel_y2) // 2,
-                              text=short,
-                              font=tkfont.Font(family="Courier New", size=7, weight="bold"),
-                              fill=T["slot_mod_fg"],
-                              anchor="center",
-                              tags=tag)
-
-            c.create_rectangle(sx1 + 4, sy2 - 6, sx2 - 4, sy2 - 2,
-                                fill="#0a1520",
-                                outline="",
-                                tags=tag)
-
-        # Draw selection outline if selected
         if is_sel:
-            c.create_rectangle(sx1, sy1, sx2, sy2,
-                               fill="", outline="#f0b040",
-                               width=3, tags=tag)
+            face_col = T["slot_sel_face"]
+            edge_col = T["slot_sel"]
+        else:
+            face_col = T["slot_face"]
+            edge_col = T["slot_edge_sh"]
+
+        c.create_rectangle(sx1, sy1, sx2, sy2,
+                            fill=face_col,
+                            outline=edge_col,
+                            width=2,
+                            tags=tag)
+
+        cap_w = 22
+        cap_h = 8
+        c.create_rectangle(mx - cap_w // 2, sy1 + 8,
+                            mx + cap_w // 2, sy1 + 8 + cap_h,
+                            fill=T["slot_cap"] if not is_sel else "#fde68a",
+                            outline=edge_col,
+                            width=1, tags=tag)
+
+        panel_y1 = sy1 + 8 + cap_h + 8
+        panel_y2 = sy2 - 10
+        c.create_rectangle(sx1 + 6, panel_y1, sx2 - 6, panel_y2,
+                            fill=face_col,
+                            outline=edge_col,
+                            width=1, tags=tag)
+
+        if module:
+            short = module.split()[0]
+            c.create_text(mx, (panel_y1 + panel_y2) // 2,
+                          text=short,
+                          font=tkfont.Font(family="Courier New", size=7, weight="bold"),
+                          fill=T["slot_mod_fg"],
+                          anchor="center",
+                          tags=tag)
+
+        c.create_rectangle(sx1 + 4, sy2 - 6, sx2 - 4, sy2 - 2,
+                            fill="#0a1520",
+                            outline="",
+                            tags=tag)
 
         c.tag_bind(tag, "<Enter>",
                    lambda e, t=tag, k=key: self._hover(t, k, True))
@@ -667,20 +640,33 @@ class RackArea:
         slot_h = max(1, sy2 - sy1)
 
         base_dir = os.path.dirname(os.path.abspath(__file__))
+        candidates = [
+            os.path.join(base_dir, 'src', 'images', 'VMM-6M.jpg'),
+            os.path.join(base_dir, 'images', 'VMM-6M.jpg'),
+            os.path.join(base_dir, 'VMM-6M.jpg'),
+            os.path.join(base_dir, 'src', 'VMM-6M.jpg'),
+        ]
+        img_path = next((p for p in candidates if os.path.isfile(p)), None)
 
         if not hasattr(self, '_module_images'):
             self._module_images = {}
 
-        photo = _load_photo(base_dir, "VMM-6M.jpg", slot_w, slot_h,
-                             label=f"VMM-6M slot {slot_num}")
+        loaded = False
+        if img_path:
+            try:
+                img    = Image.open(img_path).convert("RGB")
+                img = img.resize((slot_w, slot_h), Image.Resampling.LANCZOS)
+                photo = ImageTk.PhotoImage(img)
+                c.create_rectangle(sx1, sy1, sx2, sy2,
+                                   fill="#0a0e14", outline="",
+                                   width=0, tags=tag)
+                c.create_image(sx1, sy1, image=photo, anchor="nw", tags=tag)
+                self._module_images[key] = photo
+                loaded = True
+            except Exception:
+                pass
 
-        if photo is not None:
-            c.create_rectangle(sx1, sy1, sx2, sy2,
-                               fill="#0a0e14", outline="",
-                               width=0, tags=tag)
-            c.create_image(sx1, sy1, image=photo, anchor="nw", tags=tag)
-            self._module_images[key] = photo
-        else:
+        if not loaded:
             c.create_rectangle(sx1, sy1, sx2, sy2,
                                fill="#1a4fa0", outline="",
                                width=0, tags=tag)
@@ -720,20 +706,33 @@ class RackArea:
         slot_h = max(1, sy2 - sy1)
 
         base_dir = os.path.dirname(os.path.abspath(__file__))
+        candidates = [
+            os.path.join(base_dir, 'src', 'images', 'Relay_Module.jpg'),
+            os.path.join(base_dir, 'images', 'Relay_Module.jpg'),
+            os.path.join(base_dir, 'Relay_Module.jpg'),
+            os.path.join(base_dir, 'src', 'Relay_Module.jpg'),
+        ]
+        img_path = next((p for p in candidates if os.path.isfile(p)), None)
 
         if not hasattr(self, '_module_images'):
             self._module_images = {}
 
-        photo = _load_photo(base_dir, "Relay_Module.jpg", slot_w, slot_h,
-                             label=f"Relay slot {slot_num}")
+        loaded = False
+        if img_path:
+            try:
+                img = Image.open(img_path).convert("RGB")
+                img = img.resize((slot_w, slot_h), Image.Resampling.LANCZOS)
+                photo = ImageTk.PhotoImage(img)
+                c.create_rectangle(sx1, sy1, sx2, sy2,
+                                   fill="#0a0e14", outline="",
+                                   width=0, tags=tag)
+                c.create_image(sx1, sy1, image=photo, anchor="nw", tags=tag)
+                self._module_images[key] = photo
+                loaded = True
+            except Exception:
+                pass
 
-        if photo is not None:
-            c.create_rectangle(sx1, sy1, sx2, sy2,
-                               fill="#0a0e14", outline="",
-                               width=0, tags=tag)
-            c.create_image(sx1, sy1, image=photo, anchor="nw", tags=tag)
-            self._module_images[key] = photo
-        else:
+        if not loaded:
             c.create_rectangle(sx1, sy1, sx2, sy2,
                                fill="#1a4fa0", outline="",
                                width=0, tags=tag)
@@ -794,7 +793,7 @@ class RackArea:
     def _module_dialog(self, key: str, slot_num: int):
         def on_selection(selection):
             current_module = self._slot_data.get(key)
-
+            
             if current_module and selection != "No Modules" and current_module != selection:
                 def on_switch_confirmed(confirmed):
                     if confirmed:
@@ -807,13 +806,13 @@ class RackArea:
                         self._hint_var.set(
                             f"Slot {slot_num} → {self._slot_data.get(key, 'Empty')}"
                         )
-
+                
                 popup = ModuleSwitchConfirmationPopup(
                     self._canvas, self._fonts, current_module, selection, on_switch_confirmed
                 )
                 popup.show()
                 return
-
+            
             if selection == "No Modules":
                 self._slot_data.pop(key, None)
             else:
