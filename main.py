@@ -81,7 +81,11 @@ class VMS3000(tk.Tk):
             "new":              self._cmd_new,
             "open":             self._cmd_open,
             "save":             self._cmd_save,
+<<<<<<< HEAD
             "save_as":          self._cmd_save_as,
+=======
+            "rack_setup":       self._cmd_rack_setup,
+>>>>>>> aae13060177e81e93ca6bc8acfdf41273744ca6a
             "direct_connect":   self._cmd_direct_connect,
             "network_connect":  self._cmd_network_connect,
             "disconnect":       self._cmd_disconnect,

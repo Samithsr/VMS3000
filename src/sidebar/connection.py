@@ -7,7 +7,11 @@ Single self-contained file — no external theme.py required.
 
 import tkinter as tk
 import tkinter.font as tkfont
+<<<<<<< HEAD
 from tkinter import messagebox
+=======
+from tkinter import messagebox, ttk
+>>>>>>> aae13060177e81e93ca6bc8acfdf41273744ca6a
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -126,6 +130,30 @@ class DirectConnectDialog:
             "baud_rate": "9600",
         }
 
+<<<<<<< HEAD
+=======
+        # Configure ttk style to match entry field appearance
+        self._style = ttk.Style()
+        self._style.theme_use('clam')
+        self._style.configure(
+            "TCombobox",
+            fieldbackground="#ffffff",
+            background="#ffffff",
+            foreground=T["text"],
+            bordercolor=T["btn_border"],
+            lightcolor=T["btn_border"],
+            darkcolor=T["btn_border"],
+            arrowsize=15,
+            arrowcolor=T["text"],
+            font=("Consolas", 10),
+        )
+        self._style.map(
+            "TCombobox",
+            fieldbackground=[("readonly", "#ffffff"), ("!readonly", "#ffffff")],
+            background=[("readonly", "#ffffff"), ("!readonly", "#ffffff")],
+        )
+
+>>>>>>> aae13060177e81e93ca6bc8acfdf41273744ca6a
         self._create_dialog()
 
     def _f(self, key, family="Segoe UI", size=9, weight="normal"):
@@ -203,9 +231,15 @@ class DirectConnectDialog:
         grp.pack(fill="x", pady=(0, 10))
 
         self._field(grp, "Connect Password :", "connect_password", pw=True)
+<<<<<<< HEAD
         self._field_with_browse(grp, "Rack Address :", "rack_address")
         self._field(grp, "COM Port :", "com_port", pw=False)
         self._field(grp, "Baud Rate :", "baud_rate", pw=False)
+=======
+        self._field_with_dropdown(grp, "Rack Address :", "rack_address", values=[str(i) for i in range(1, 256)])
+        self._field_with_dropdown(grp, "COM Port :", "com_port", values=[f"COM{i}" for i in range(1, 17)])
+        self._field_with_dropdown(grp, "Baud Rate :", "baud_rate", values=["9600", "19200", "38400", "57600", "115200"])
+>>>>>>> aae13060177e81e93ca6bc8acfdf41273744ca6a
 
     def _field(self, parent, label_text, key, *, pw):
         row = tk.Frame(parent, bg=T["win_bg"])
@@ -252,6 +286,40 @@ class DirectConnectDialog:
         entry.bind("<Enter>", _on_enter)
         entry.bind("<Leave>", _on_leave)
 
+<<<<<<< HEAD
+=======
+    def _field_with_dropdown(self, parent, label_text, key, values):
+        """Field with dropdown (combobox) for selection fields."""
+        row = tk.Frame(parent, bg=T["win_bg"])
+        row.pack(fill="x", pady=4)
+
+        lbl = tk.Label(
+            row,
+            text=label_text,
+            font=self._f("sm_b", size=9, weight="bold"),
+            bg=T["win_bg"],
+            fg=T["text"],
+            anchor="e",
+            width=18,
+        )
+        lbl.pack(side="left")
+
+        var = tk.StringVar(value=self._defaults.get(key, ""))
+        self._vars[key] = var
+
+        # Create combobox with provided values
+        combo = ttk.Combobox(
+            row,
+            textvariable=var,
+            values=values,
+            font=self._f("mono", family="Consolas", size=10),
+            state="readonly",
+            width=18,
+        )
+        combo.pack(side="left", padx=(8, 0))
+        combo.set(self._defaults.get(key, values[0] if values else ""))
+
+>>>>>>> aae13060177e81e93ca6bc8acfdf41273744ca6a
     def _field_with_browse(self, parent, label_text, key):
         """Field with Browse button for Rack Address."""
         row = tk.Frame(parent, bg=T["win_bg"])
