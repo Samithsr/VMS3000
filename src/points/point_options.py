@@ -1,0 +1,214 @@
+"""
+point_options.py — VMS 3000  •  Point Options Context Menu
+Theme-matched to the industrial SCADA palette (navy/steel/amber/teal).
+Provides right-click context menu for DIS_MODULE with Setpoints and Point Names options.
+"""
+
+import tkinter as tk
+import tkinter.font as tkfont
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+#  THEME  —  VMS 3000 Industrial SCADA colour palette
+# ══════════════════════════════════════════════════════════════════════════════
+
+T = {
+    # ── Context menu ───────────────────────────────────────────────────────
+    "menu_bg":          "#2a5080",
+    "menu_fg":          "#e8f0ff",
+    "menu_active_bg":   "#3a6a9e",
+    "menu_active_fg":   "#ffffff",
+    "menu_border":      "#1a3a5c",
+    "menu_sep":         "#3a6090",
+    
+    # ── Text ──────────────────────────────────────────────────────────────
+    "text":             "#1a2533",
+    "text_dim":         "#5a6a7a",
+    "text_white":       "#ffffff",
+    
+    # ── Accent ────────────────────────────────────────────────────────────
+    "accent":           "#1a4fa0",
+    "accent_light":     "#3a6fcc",
+}
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+#  Point Options Context Menu
+# ══════════════════════════════════════════════════════════════════════════════
+
+class PointOptionsContextMenu:
+    """Right-click context menu for DIS_MODULE with Setpoints and Point Names options."""
+    
+    def __init__(self, parent, fonts, slot_num, on_options=None, on_setpoints=None, on_point_names=None):
+        """
+        Initialize the context menu.
+        
+        Args:
+            parent: Parent widget (usually canvas)
+            fonts: Font dictionary from main application
+            slot_num: Slot number for the DIS_MODULE
+            on_options: Callback when Options is selected
+            on_setpoints: Callback when Setpoints is selected
+            on_point_names: Callback when Point Names is selected
+        """
+        self._parent = parent
+        self._fonts = fonts
+        self._slot_num = slot_num
+        self._on_options = on_options
+        self._on_setpoints = on_setpoints
+        self._on_point_names = on_point_names
+        
+        self._menu = tk.Menu(
+            parent,
+            bg=T["menu_bg"],
+            fg=T["menu_fg"],
+            activebackground=T["menu_active_bg"],
+            activeforeground=T["menu_active_fg"],
+            borderwidth=1,
+            relief="solid",
+            tearoff=0
+        )
+        
+        self._build_menu()
+    
+    def _build_menu(self):
+        """Build the context menu items."""
+        # Options option
+        self._menu.add_command(
+            label="Options...",
+            font=self._fonts.get("normal", tkfont.Font(family="Segoe UI", size=9)),
+            command=self._on_options_click
+        )
+        
+        # Separator
+        self._menu.add_separator(
+            background=T["menu_sep"]
+        )
+        
+        # Setpoints option
+        self._menu.add_command(
+            label="Setpoints...",
+            font=self._fonts.get("normal", tkfont.Font(family="Segoe UI", size=9)),
+            command=self._on_setpoints_click
+        )
+        
+        # Separator
+        self._menu.add_separator(
+            background=T["menu_sep"]
+        )
+        
+        # Point Names option
+        self._menu.add_command(
+            label="Point Names...",
+            font=self._fonts.get("normal", tkfont.Font(family="Segoe UI", size=9)),
+            command=self._on_point_names_click
+        )
+    
+    def _on_options_click(self):
+        """Handle Options menu item click."""
+        if self._on_options:
+            self._on_options(self._slot_num)
+    
+    def _on_setpoints_click(self):
+        """Handle Setpoints menu item click."""
+        if self._on_setpoints:
+            self._on_setpoints(self._slot_num)
+    
+    def _on_point_names_click(self):
+        """Handle Point Names menu item click."""
+        if self._on_point_names:
+            self._on_point_names(self._slot_num)
+    
+    def show(self, x, y):
+        """Display the context menu at the specified coordinates."""
+        self._menu.tk_popup(x, y)
+    
+    def destroy(self):
+        """Destroy the menu."""
+        self._menu.destroy()
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+#  Setpoints Dialog (placeholder for future implementation)
+# ══════════════════════════════════════════════════════════════════════════════
+
+class SetpointsDialog:
+    """Dialog for configuring setpoints for DIS_MODULE."""
+    
+    def __init__(self, parent, fonts, slot_num):
+        self._parent = parent
+        self._fonts = fonts
+        self._slot_num = slot_num
+        self._dialog = None
+    
+    def show(self):
+        """Display the setpoints dialog."""
+        self._dialog = tk.Toplevel(self._parent)
+        self._dialog.title(f"Setpoints - Slot {self._slot_num}")
+        self._dialog.geometry("400x300")
+        self._dialog.configure(bg=T["win_bg"])
+        
+        # TODO: Implement setpoints configuration UI
+        label = tk.Label(
+            self._dialog,
+            text=f"Setpoints Configuration for Slot {self._slot_num}",
+            font=self._fonts.get("title", tkfont.Font(family="Segoe UI", size=12, weight="bold")),
+            bg=T["win_bg"],
+            fg=T["text"]
+        )
+        label.pack(pady=20)
+        
+        close_btn = tk.Button(
+            self._dialog,
+            text="Close",
+            command=self._dialog.destroy,
+            font=self._fonts.get("normal", tkfont.Font(family="Segoe UI", size=9)),
+            bg=T["btn_face"],
+            relief="raised"
+        )
+        close_btn.pack(pady=10)
+        
+        self._dialog.wait_window()
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+#  Point Names Dialog (placeholder for future implementation)
+# ══════════════════════════════════════════════════════════════════════════════
+
+class PointNamesDialog:
+    """Dialog for configuring point names for DIS_MODULE."""
+    
+    def __init__(self, parent, fonts, slot_num):
+        self._parent = parent
+        self._fonts = fonts
+        self._slot_num = slot_num
+        self._dialog = None
+    
+    def show(self):
+        """Display the point names dialog."""
+        self._dialog = tk.Toplevel(self._parent)
+        self._dialog.title(f"Point Names - Slot {self._slot_num}")
+        self._dialog.geometry("400x300")
+        self._dialog.configure(bg=T["win_bg"])
+        
+        # TODO: Implement point names configuration UI
+        label = tk.Label(
+            self._dialog,
+            text=f"Point Names Configuration for Slot {self._slot_num}",
+            font=self._fonts.get("title", tkfont.Font(family="Segoe UI", size=12, weight="bold")),
+            bg=T["win_bg"],
+            fg=T["text"]
+        )
+        label.pack(pady=20)
+        
+        close_btn = tk.Button(
+            self._dialog,
+            text="Close",
+            command=self._dialog.destroy,
+            font=self._fonts.get("normal", tkfont.Font(family="Segoe UI", size=9)),
+            bg=T["btn_face"],
+            relief="raised"
+        )
+        close_btn.pack(pady=10)
+        
+        self._dialog.wait_window()
