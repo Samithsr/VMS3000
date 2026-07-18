@@ -82,6 +82,7 @@ class VMS3000(tk.Tk):
             "open":             self._cmd_open,
             "save":             self._cmd_save,
 <<<<<<< HEAD
+<<<<<<< HEAD
             "save_as":          self._cmd_save_as,
 =======
 <<<<<<< HEAD
@@ -90,6 +91,9 @@ class VMS3000(tk.Tk):
             "rack_setup":       self._cmd_rack_setup,
 >>>>>>> aae13060177e81e93ca6bc8acfdf41273744ca6a
 >>>>>>> 30cb68c825b94be769ab3d9a83ba4efb5364ceee
+=======
+            "save_as":          self._cmd_save_as,
+>>>>>>> 66e928a (add setpoints in 3000/12M/DIS)
             "direct_connect":   self._cmd_direct_connect,
             "network_connect":  self._cmd_network_connect,
             "disconnect":       self._cmd_disconnect,

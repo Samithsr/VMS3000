@@ -126,6 +126,7 @@ class PointOptionsContextMenu:
     def destroy(self):
         """Destroy the menu."""
         self._menu.destroy()
+<<<<<<< HEAD
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -212,3 +213,5 @@ class PointNamesDialog:
         close_btn.pack(pady=10)
         
         self._dialog.wait_window()
+=======
+>>>>>>> 66e928a (add setpoints in 3000/12M/DIS)

@@ -12,7 +12,12 @@ from popups.configuration_settings import ConfigurationSettingsPopup
 from popups.monitors import ModuleSelectionPopup
 from popups.module_switch_confirmation import ModuleSwitchConfirmationPopup
 from snapshot.racksnapshot import get_module_config, is_image_display_module
+<<<<<<< HEAD
 from points.point_options import PointOptionsContextMenu, SetpointsDialog, PointNamesDialog
+=======
+from points.point_options import PointOptionsContextMenu
+from points.setpoins import SetpointsDialog
+>>>>>>> 66e928a (add setpoints in 3000/12M/DIS)
 from points.proximiter12m_ridial import ProximityMonitor3000ConfigDialog
 
 SLOT_COUNT = 12
@@ -238,9 +243,12 @@ class RackArea:
 
             if module == DIS_MODULE:
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 >>>>>>> 30cb68c825b94be769ab3d9a83ba4efb5364ceee
+=======
+>>>>>>> 66e928a (add setpoints in 3000/12M/DIS)
                 # DIS occupies raw slots i and i+1 (displayed numbers
                 # i-1 and i respectively). Show the pair's SECOND /
                 # higher displayed number — i.e. "i" — not the first
@@ -248,10 +256,13 @@ class RackArea:
                 # incorrectly showed display_num, causing e.g. clicking
                 # displayed slot 1 (raw slot 2) to show "1" instead of "2".
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 =======
 >>>>>>> aae13060177e81e93ca6bc8acfdf41273744ca6a
 >>>>>>> 30cb68c825b94be769ab3d9a83ba4efb5364ceee
+=======
+>>>>>>> 66e928a (add setpoints in 3000/12M/DIS)
                 cx = L["slot_x0"] + (i - 1 + 1.0) * L["sw"]
                 c.create_text(cx, L["TOP_Y"] - 14,
                               text=str(i),
@@ -366,15 +377,19 @@ class RackArea:
             self._psm_top_photo = None
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 >>>>>>> 30cb68c825b94be769ab3d9a83ba4efb5364ceee
+=======
+>>>>>>> 66e928a (add setpoints in 3000/12M/DIS)
         if photo is not None:
             c.create_rectangle(x1, y1, x2, top_end,
                                fill="#0a0e14", outline="", tags="rack_bg")
             c.create_image(x1, y1, image=photo, anchor="nw")
             self._psm_top_photo = photo
         else:
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 =======
@@ -395,6 +410,8 @@ class RackArea:
         if not loaded:
 >>>>>>> aae13060177e81e93ca6bc8acfdf41273744ca6a
 >>>>>>> 30cb68c825b94be769ab3d9a83ba4efb5364ceee
+=======
+>>>>>>> 66e928a (add setpoints in 3000/12M/DIS)
             self._draw_psm_panel(c, L, x1, y1, x2, top_end, "VMS-3000 PSM")
 
     # ── MIDDLE strip — Powersupply.jpg image, stretch-filled ─────────────
@@ -417,15 +434,19 @@ class RackArea:
             self._psm_middle_photo = None
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 >>>>>>> 30cb68c825b94be769ab3d9a83ba4efb5364ceee
+=======
+>>>>>>> 66e928a (add setpoints in 3000/12M/DIS)
         if photo is not None:
             c.create_rectangle(x1, top_end + 2, x2, bot_st - 2,
                                fill="#0a0e14", outline="", tags="rack_bg")
             c.create_image(x1, top_end + 2, image=photo, anchor="nw")
             self._psm_middle_photo = photo
         else:
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 =======
@@ -446,6 +467,8 @@ class RackArea:
         if not loaded:
 >>>>>>> aae13060177e81e93ca6bc8acfdf41273744ca6a
 >>>>>>> 30cb68c825b94be769ab3d9a83ba4efb5364ceee
+=======
+>>>>>>> 66e928a (add setpoints in 3000/12M/DIS)
             c.create_rectangle(x1, top_end + 2, x2, bot_st - 2,
                                fill="#0d1a28", outline="", tags="rack_bg")
 
@@ -467,15 +490,19 @@ class RackArea:
             self._psm_bottom_photo = None
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 >>>>>>> 30cb68c825b94be769ab3d9a83ba4efb5364ceee
+=======
+>>>>>>> 66e928a (add setpoints in 3000/12M/DIS)
         if photo is not None:
             c.create_rectangle(x1, bot_st, x2, y2,
                                fill="#0a0e14", outline="", tags="rack_bg")
             c.create_image(x1, bot_st, image=photo, anchor="nw")
             self._psm_bottom_photo = photo
         else:
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 =======
@@ -496,6 +523,8 @@ class RackArea:
         if not loaded:
 >>>>>>> aae13060177e81e93ca6bc8acfdf41273744ca6a
 >>>>>>> 30cb68c825b94be769ab3d9a83ba4efb5364ceee
+=======
+>>>>>>> 66e928a (add setpoints in 3000/12M/DIS)
             content_y = self._draw_psm_panel(c, L, x1, bot_st, x2, y2, "VMS-3000 CPU")
 
             box_x1 = x1 + 6
@@ -593,6 +622,7 @@ class RackArea:
 
         base_dir = os.path.dirname(os.path.abspath(__file__))
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
@@ -607,6 +637,8 @@ class RackArea:
         ]
 >>>>>>> aae13060177e81e93ca6bc8acfdf41273744ca6a
 >>>>>>> 30cb68c825b94be769ab3d9a83ba4efb5364ceee
+=======
+>>>>>>> 66e928a (add setpoints in 3000/12M/DIS)
 
         if not hasattr(self, '_module_images'):
             self._module_images = {}
@@ -615,9 +647,12 @@ class RackArea:
                              label=f"DIS module slot {slot_num}")
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 >>>>>>> 30cb68c825b94be769ab3d9a83ba4efb5364ceee
+=======
+>>>>>>> 66e928a (add setpoints in 3000/12M/DIS)
         if photo is not None:
             c.create_rectangle(sx1, sy1, sx2, sy2,
                                fill="#0a0e14", outline="",
@@ -625,6 +660,7 @@ class RackArea:
             c.create_image(sx1, sy1, image=photo, anchor="nw", tags=tag)
             self._module_images[key] = photo
         else:
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 =======
@@ -646,6 +682,8 @@ class RackArea:
         if not loaded:
 >>>>>>> aae13060177e81e93ca6bc8acfdf41273744ca6a
 >>>>>>> 30cb68c825b94be769ab3d9a83ba4efb5364ceee
+=======
+>>>>>>> 66e928a (add setpoints in 3000/12M/DIS)
             c.create_rectangle(sx1, sy1, sx2, sy2,
                                fill="#1a4fa0", outline="",
                                width=0, tags=tag)
@@ -703,9 +741,12 @@ class RackArea:
         mx  = (sx1 + sx2) // 2
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 >>>>>>> 30cb68c825b94be769ab3d9a83ba4efb5364ceee
+=======
+>>>>>>> 66e928a (add setpoints in 3000/12M/DIS)
         base_dir = os.path.dirname(os.path.abspath(__file__))
 
         if not hasattr(self, '_no_module_images'):
@@ -719,6 +760,7 @@ class RackArea:
             photo = _load_photo(base_dir, "Configuration_Module.jpg", slot_w, slot_h,
                                  label=f"configuration panel slot {slot_num}")
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 =======
         if is_sel:
@@ -726,14 +768,19 @@ class RackArea:
             edge_col = T["slot_sel"]
 >>>>>>> aae13060177e81e93ca6bc8acfdf41273744ca6a
 >>>>>>> 30cb68c825b94be769ab3d9a83ba4efb5364ceee
+=======
+>>>>>>> 66e928a (add setpoints in 3000/12M/DIS)
         else:
             photo = _load_photo(base_dir, "NO_Module.jpg", slot_w, slot_h,
                                  label=f"empty slot {slot_num}")
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 >>>>>>> 30cb68c825b94be769ab3d9a83ba4efb5364ceee
+=======
+>>>>>>> 66e928a (add setpoints in 3000/12M/DIS)
         if photo is not None:
             # Draw image directly without black background
             c.create_image(sx1, sy1, image=photo, anchor="nw", tags=tag)
@@ -747,6 +794,7 @@ class RackArea:
             else:
                 face_col = T["slot_face"]
                 edge_col = T["slot_edge_sh"]
+<<<<<<< HEAD
 <<<<<<< HEAD
 
             c.create_rectangle(sx1, sy1, sx2, sy2,
@@ -800,6 +848,22 @@ class RackArea:
                             width=1, tags=tag)
 >>>>>>> aae13060177e81e93ca6bc8acfdf41273744ca6a
 >>>>>>> 30cb68c825b94be769ab3d9a83ba4efb5364ceee
+=======
+
+            c.create_rectangle(sx1, sy1, sx2, sy2,
+                                fill=face_col,
+                                outline=edge_col,
+                                width=2,
+                                tags=tag)
+
+            cap_w = 22
+            cap_h = 8
+            c.create_rectangle(mx - cap_w // 2, sy1 + 8,
+                                mx + cap_w // 2, sy1 + 8 + cap_h,
+                                fill=T["slot_cap"] if not is_sel else "#fde68a",
+                                outline=edge_col,
+                                width=1, tags=tag)
+>>>>>>> 66e928a (add setpoints in 3000/12M/DIS)
 
             panel_y1 = sy1 + 8 + cap_h + 8
             panel_y2 = sy2 - 10
@@ -809,9 +873,12 @@ class RackArea:
                                 width=1, tags=tag)
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 >>>>>>> 30cb68c825b94be769ab3d9a83ba4efb5364ceee
+=======
+>>>>>>> 66e928a (add setpoints in 3000/12M/DIS)
             if module:
                 short = module.split()[0]
                 c.create_text(mx, (panel_y1 + panel_y2) // 2,
@@ -832,6 +899,7 @@ class RackArea:
                                fill="", outline="#f0b040",
                                width=3, tags=tag)
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 =======
         c.create_rectangle(sx1 + 4, sy2 - 6, sx2 - 4, sy2 - 2,
@@ -840,6 +908,8 @@ class RackArea:
                             tags=tag)
 >>>>>>> aae13060177e81e93ca6bc8acfdf41273744ca6a
 >>>>>>> 30cb68c825b94be769ab3d9a83ba4efb5364ceee
+=======
+>>>>>>> 66e928a (add setpoints in 3000/12M/DIS)
 
         c.tag_bind(tag, "<Enter>",
                    lambda e, t=tag, k=key: self._hover(t, k, True))
@@ -871,9 +941,12 @@ class RackArea:
             self._module_images = {}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 >>>>>>> 30cb68c825b94be769ab3d9a83ba4efb5364ceee
+=======
+>>>>>>> 66e928a (add setpoints in 3000/12M/DIS)
         photo = _load_photo(base_dir, "VMM-6M.jpg", slot_w, slot_h,
                              label=f"VMM-6M slot {slot_num}")
 
@@ -884,6 +957,7 @@ class RackArea:
             c.create_image(sx1, sy1, image=photo, anchor="nw", tags=tag)
             self._module_images[key] = photo
         else:
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 =======
@@ -905,6 +979,8 @@ class RackArea:
         if not loaded:
 >>>>>>> aae13060177e81e93ca6bc8acfdf41273744ca6a
 >>>>>>> 30cb68c825b94be769ab3d9a83ba4efb5364ceee
+=======
+>>>>>>> 66e928a (add setpoints in 3000/12M/DIS)
             c.create_rectangle(sx1, sy1, sx2, sy2,
                                fill="#1a4fa0", outline="",
                                width=0, tags=tag)
@@ -949,9 +1025,12 @@ class RackArea:
             self._module_images = {}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 >>>>>>> 30cb68c825b94be769ab3d9a83ba4efb5364ceee
+=======
+>>>>>>> 66e928a (add setpoints in 3000/12M/DIS)
         photo = _load_photo(base_dir, "Relay_Module.jpg", slot_w, slot_h,
                              label=f"Relay slot {slot_num}")
 
@@ -962,6 +1041,7 @@ class RackArea:
             c.create_image(sx1, sy1, image=photo, anchor="nw", tags=tag)
             self._module_images[key] = photo
         else:
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 =======
@@ -983,6 +1063,8 @@ class RackArea:
         if not loaded:
 >>>>>>> aae13060177e81e93ca6bc8acfdf41273744ca6a
 >>>>>>> 30cb68c825b94be769ab3d9a83ba4efb5364ceee
+=======
+>>>>>>> 66e928a (add setpoints in 3000/12M/DIS)
             c.create_rectangle(sx1, sy1, sx2, sy2,
                                fill="#1a4fa0", outline="",
                                width=0, tags=tag)
@@ -1044,8 +1126,13 @@ class RackArea:
                 dialog.show()
             
             def on_point_names(slot):
+<<<<<<< HEAD
                 dialog = PointNamesDialog(self._canvas, self._fonts, slot)
                 dialog.show()
+=======
+                # TODO: Implement Point Names dialog
+                print(f"Point Names for slot {slot}")
+>>>>>>> 66e928a (add setpoints in 3000/12M/DIS)
             
             context_menu = PointOptionsContextMenu(
                 self._canvas,
@@ -1095,9 +1182,12 @@ class RackArea:
         def on_selection(selection):
             current_module = self._slot_data.get(key)
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 >>>>>>> 30cb68c825b94be769ab3d9a83ba4efb5364ceee
+=======
+>>>>>>> 66e928a (add setpoints in 3000/12M/DIS)
 
             # ── Rule: last slot (raw 12 / displayed 11) is restricted ──
             if slot_num == self._LAST_SLOT_RESTRICTED and not self._is_vmm_or_relay(selection):
@@ -1148,11 +1238,14 @@ class RackArea:
                     return
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 =======
             
 >>>>>>> aae13060177e81e93ca6bc8acfdf41273744ca6a
 >>>>>>> 30cb68c825b94be769ab3d9a83ba4efb5364ceee
+=======
+>>>>>>> 66e928a (add setpoints in 3000/12M/DIS)
             if current_module and selection != "No Modules" and current_module != selection:
                 def on_switch_confirmed(confirmed):
                     if confirmed:
