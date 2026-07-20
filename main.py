@@ -81,7 +81,23 @@ class VMS3000(tk.Tk):
             "new":              self._cmd_new,
             "open":             self._cmd_open,
             "save":             self._cmd_save,
+<<<<<<< HEAD
             "save_as":          self._cmd_save_as,
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+            "save_as":          self._cmd_save_as,
+=======
+<<<<<<< HEAD
+            "save_as":          self._cmd_save_as,
+=======
+            "rack_setup":       self._cmd_rack_setup,
+>>>>>>> aae13060177e81e93ca6bc8acfdf41273744ca6a
+>>>>>>> 30cb68c825b94be769ab3d9a83ba4efb5364ceee
+=======
+            "save_as":          self._cmd_save_as,
+>>>>>>> 66e928a (add setpoints in 3000/12M/DIS)
+>>>>>>> ff8067635a4b01fe09b0b2c1834fbdd567d431fc
             "direct_connect":   self._cmd_direct_connect,
             "network_connect":  self._cmd_network_connect,
             "disconnect":       self._cmd_disconnect,
@@ -181,10 +197,25 @@ class VMS3000(tk.Tk):
             self._rack.clear()
 
     def _cmd_open(self):
+<<<<<<< HEAD
         self._rack.load_configuration()
 
     def _cmd_save(self):
         self._rack.save_configuration()
+=======
+        dialog = LoadConfigDialog(self, self.F)
+        file_path = dialog.show()
+        if file_path:
+            # TODO: Add logic to load and parse the selected .rcs file
+            messagebox.showinfo("Load Configuration", f"Configuration loaded from:\n{file_path}", parent=self)
+
+    def _cmd_save(self):
+        dialog = SaveConfigDialog(self, self.F)
+        file_path = dialog.show()
+        if file_path:
+            # TODO: Add logic to save the configuration data to the selected file
+            messagebox.showinfo("Save Configuration", f"Configuration saved to:\n{file_path}", parent=self)
+>>>>>>> ff8067635a4b01fe09b0b2c1834fbdd567d431fc
 
     def _cmd_save_as(self):
         messagebox.showinfo("Save As", "Save As ready.", parent=self)

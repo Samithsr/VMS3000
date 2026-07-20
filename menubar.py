@@ -103,7 +103,23 @@ def build_menubar(root, fonts, commands: dict):
     file_menu.add_command(label="  New",            accelerator="Ctrl+N", command=commands.get("new") or (lambda: None))
     file_menu.add_command(label="  Open…",          accelerator="Ctrl+O", command=commands.get("open") or (lambda: None))
     file_menu.add_command(label="  Save",           accelerator="Ctrl+S", command=commands.get("save") or (lambda: None))
+<<<<<<< HEAD
     file_menu.add_command(label="  Save As…",       accelerator="Ctrl+Shift+S", command=commands.get("save_as") or (lambda: None))
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    file_menu.add_command(label="  Save As…",       accelerator="Ctrl+Shift+S", command=commands.get("save_as") or (lambda: None))
+=======
+<<<<<<< HEAD
+    file_menu.add_command(label="  Save As…",       accelerator="Ctrl+Shift+S", command=commands.get("save_as") or (lambda: None))
+=======
+    file_menu.add_command(label="  Rack Setup",    accelerator="", command=commands.get("rack_setup") or (lambda: None))
+>>>>>>> aae13060177e81e93ca6bc8acfdf41273744ca6a
+>>>>>>> 30cb68c825b94be769ab3d9a83ba4efb5364ceee
+=======
+    file_menu.add_command(label="  Save As…",       accelerator="Ctrl+Shift+S", command=commands.get("save_as") or (lambda: None))
+>>>>>>> 66e928a (add setpoints in 3000/12M/DIS)
+>>>>>>> ff8067635a4b01fe09b0b2c1834fbdd567d431fc
     
     # Connection submenu
     connection_menu = tk.Menu(
@@ -126,7 +142,23 @@ def build_menubar(root, fonts, commands: dict):
     file_menu.add_separator()
     file_menu.add_command(label="  Print…",         accelerator="Ctrl+P", command=None)
     file_menu.add_separator()
+<<<<<<< HEAD
     file_menu.add_command(label="  Exit",           accelerator="Alt+F4", command=root.destroy)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    file_menu.add_command(label="  Exit",           accelerator="Alt+F4", command=root.destroy)
+=======
+<<<<<<< HEAD
+    file_menu.add_command(label="  Exit",           accelerator="Alt+F4", command=root.destroy)
+=======
+    file_menu.add_command(label="  Exit",           accelerator="Alt+F4", command=commands.get("exit") or (lambda: None))
+>>>>>>> aae13060177e81e93ca6bc8acfdf41273744ca6a
+>>>>>>> 30cb68c825b94be769ab3d9a83ba4efb5364ceee
+=======
+    file_menu.add_command(label="  Exit",           accelerator="Alt+F4", command=root.destroy)
+>>>>>>> 66e928a (add setpoints in 3000/12M/DIS)
+>>>>>>> ff8067635a4b01fe09b0b2c1834fbdd567d431fc
     
     mb.add_cascade(label="  File  ", menu=file_menu)
 
