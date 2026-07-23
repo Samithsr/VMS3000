@@ -276,6 +276,7 @@ class RelayConfigDialog:
                 canvas.create_text((x0 + x1) / 2, 10, text=str(i),
                                     font=self._f_small, fill=T["text"])
 
+<<<<<<< HEAD
                 # background plate behind the module image
                 plate_fill = T["slot_selected"] if is_selected else T["slot_mid"]
                 canvas.create_rectangle(x0, top_y, x1, bot_y,
@@ -284,6 +285,12 @@ class RelayConfigDialog:
                 # ── real module image, scaled to FIT the slot (aspect kept,
                 #    not stretched/zoomed) — reflects whatever is actually
                 #    assigned to this slot in the live rack configuration ──
+=======
+                # ── real module image, scaled to FIT the slot (aspect kept,
+                #    not stretched/zoomed) — reflects whatever is actually
+                #    assigned to this slot in the live rack configuration.
+                #    No background plate/border drawn behind it — image only. ──
+>>>>>>> 1917283 (add 3000/6m options setpoints and pointnames)
                 module = self._rack_config.get(f"0_{i}")
                 filename = self._resolve_module_image(module)
                 box_w = max(1, (x1 - x0) - 4)

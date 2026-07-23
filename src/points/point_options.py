@@ -73,6 +73,9 @@ class PointOptionsContextMenu:
     
     def _build_menu(self):
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 1917283 (add 3000/6m options setpoints and pointnames)
         """Build the context menu items based on available callbacks."""
         item_count = 0
 
@@ -110,6 +113,7 @@ class PointOptionsContextMenu:
                 command=self._on_point_names_click
             )
             item_count += 1
+<<<<<<< HEAD
 =======
         """Build the context menu items."""
         # Options option
@@ -143,6 +147,8 @@ class PointOptionsContextMenu:
             command=self._on_point_names_click
         )
 >>>>>>> ff8067635a4b01fe09b0b2c1834fbdd567d431fc
+=======
+>>>>>>> 1917283 (add 3000/6m options setpoints and pointnames)
     
     def _on_options_click(self):
         """Handle Options menu item click."""
@@ -166,6 +172,7 @@ class PointOptionsContextMenu:
     def destroy(self):
         """Destroy the menu."""
         self._menu.destroy()
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
@@ -258,3 +265,5 @@ class PointNamesDialog:
 =======
 >>>>>>> 66e928a (add setpoints in 3000/12M/DIS)
 >>>>>>> ff8067635a4b01fe09b0b2c1834fbdd567d431fc
+=======
+>>>>>>> 1917283 (add 3000/6m options setpoints and pointnames)

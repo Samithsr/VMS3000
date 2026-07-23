@@ -13,10 +13,14 @@ from popups.monitors import ModuleSelectionPopup
 from popups.module_switch_confirmation import ModuleSwitchConfirmationPopup
 from snapshot.racksnapshot import get_module_config, is_image_display_module
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 1917283 (add 3000/6m options setpoints and pointnames)
 from points.point_options import PointOptionsContextMenu
 from points.setpoins import SetpointsDialog
 from points.proximiter12m_ridial import ProximityMonitor3000ConfigDialog
 from points.relay_config import RelayConfigDialog
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 from points.point_options import PointOptionsContextMenu, SetpointsDialog, PointNamesDialog
@@ -26,6 +30,9 @@ from points.setpoins import SetpointsDialog
 >>>>>>> 66e928a (add setpoints in 3000/12M/DIS)
 from points.proximiter12m_ridial import ProximityMonitor3000ConfigDialog
 >>>>>>> ff8067635a4b01fe09b0b2c1834fbdd567d431fc
+=======
+from points.sixm_option import SixMOptionsDialog
+>>>>>>> 1917283 (add 3000/6m options setpoints and pointnames)
 
 SLOT_COUNT = 12
 
@@ -33,6 +40,19 @@ SLOT_COUNT = 12
 DIS_MODULE = "3000/12M/DIS"
 VMM_MODULE = "VMM-6M"   # single-slot image (existing behaviour)
 RLY_MODULE = "3000/RLY"  # single-slot Relay module image (fallback exact name)
+SIXM_MODULE = "3000/6M"  # 3000/6M module
+
+
+def _is_6m_module(module: str) -> bool:
+    """
+    Check if module is a 3000/6M module.
+    """
+    if not module:
+        return False
+    if module == SIXM_MODULE:
+        return True
+    upper = module.upper()
+    return "6M" in upper and "3000" in upper
 
 
 def _is_relay_module(module: str) -> bool:
@@ -311,6 +331,7 @@ class RackArea:
 
             if module == DIS_MODULE:
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -320,12 +341,15 @@ class RackArea:
 =======
 >>>>>>> 66e928a (add setpoints in 3000/12M/DIS)
 >>>>>>> ff8067635a4b01fe09b0b2c1834fbdd567d431fc
+=======
+>>>>>>> 1917283 (add 3000/6m options setpoints and pointnames)
                 # DIS occupies raw slots i and i+1 (displayed numbers
                 # i-1 and i respectively). Show the pair's SECOND /
                 # higher displayed number — i.e. "i" — not the first
                 # slot's own number (display_num = i-1). Previously this
                 # incorrectly showed display_num, causing e.g. clicking
                 # displayed slot 1 (raw slot 2) to show "1" instead of "2".
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
@@ -337,6 +361,8 @@ class RackArea:
 =======
 >>>>>>> 66e928a (add setpoints in 3000/12M/DIS)
 >>>>>>> ff8067635a4b01fe09b0b2c1834fbdd567d431fc
+=======
+>>>>>>> 1917283 (add 3000/6m options setpoints and pointnames)
                 cx = L["slot_x0"] + (i - 1 + 1.0) * L["sw"]
                 c.create_text(cx, L["TOP_Y"] - 14,
                               text=str(i),
@@ -451,6 +477,7 @@ class RackArea:
             self._psm_top_photo = None
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -460,12 +487,15 @@ class RackArea:
 =======
 >>>>>>> 66e928a (add setpoints in 3000/12M/DIS)
 >>>>>>> ff8067635a4b01fe09b0b2c1834fbdd567d431fc
+=======
+>>>>>>> 1917283 (add 3000/6m options setpoints and pointnames)
         if photo is not None:
             c.create_rectangle(x1, y1, x2, top_end,
                                fill="#0a0e14", outline="", tags="rack_bg")
             c.create_image(x1, y1, image=photo, anchor="nw")
             self._psm_top_photo = photo
         else:
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
@@ -492,6 +522,8 @@ class RackArea:
 =======
 >>>>>>> 66e928a (add setpoints in 3000/12M/DIS)
 >>>>>>> ff8067635a4b01fe09b0b2c1834fbdd567d431fc
+=======
+>>>>>>> 1917283 (add 3000/6m options setpoints and pointnames)
             self._draw_psm_panel(c, L, x1, y1, x2, top_end, "VMS-3000 PSM")
 
     # ── MIDDLE strip — Powersupply.jpg image, stretch-filled ─────────────
@@ -514,6 +546,7 @@ class RackArea:
             self._psm_middle_photo = None
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -523,12 +556,15 @@ class RackArea:
 =======
 >>>>>>> 66e928a (add setpoints in 3000/12M/DIS)
 >>>>>>> ff8067635a4b01fe09b0b2c1834fbdd567d431fc
+=======
+>>>>>>> 1917283 (add 3000/6m options setpoints and pointnames)
         if photo is not None:
             c.create_rectangle(x1, top_end + 2, x2, bot_st - 2,
                                fill="#0a0e14", outline="", tags="rack_bg")
             c.create_image(x1, top_end + 2, image=photo, anchor="nw")
             self._psm_middle_photo = photo
         else:
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
@@ -555,6 +591,8 @@ class RackArea:
 =======
 >>>>>>> 66e928a (add setpoints in 3000/12M/DIS)
 >>>>>>> ff8067635a4b01fe09b0b2c1834fbdd567d431fc
+=======
+>>>>>>> 1917283 (add 3000/6m options setpoints and pointnames)
             c.create_rectangle(x1, top_end + 2, x2, bot_st - 2,
                                fill="#0d1a28", outline="", tags="rack_bg")
 
@@ -576,6 +614,7 @@ class RackArea:
             self._psm_bottom_photo = None
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -585,12 +624,15 @@ class RackArea:
 =======
 >>>>>>> 66e928a (add setpoints in 3000/12M/DIS)
 >>>>>>> ff8067635a4b01fe09b0b2c1834fbdd567d431fc
+=======
+>>>>>>> 1917283 (add 3000/6m options setpoints and pointnames)
         if photo is not None:
             c.create_rectangle(x1, bot_st, x2, y2,
                                fill="#0a0e14", outline="", tags="rack_bg")
             c.create_image(x1, bot_st, image=photo, anchor="nw")
             self._psm_bottom_photo = photo
         else:
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
@@ -617,6 +659,8 @@ class RackArea:
 =======
 >>>>>>> 66e928a (add setpoints in 3000/12M/DIS)
 >>>>>>> ff8067635a4b01fe09b0b2c1834fbdd567d431fc
+=======
+>>>>>>> 1917283 (add 3000/6m options setpoints and pointnames)
             content_y = self._draw_psm_panel(c, L, x1, bot_st, x2, y2, "VMS-3000 CPU")
 
             box_x1 = x1 + 6
@@ -714,6 +758,7 @@ class RackArea:
 
         base_dir = os.path.dirname(os.path.abspath(__file__))
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -734,6 +779,8 @@ class RackArea:
 =======
 >>>>>>> 66e928a (add setpoints in 3000/12M/DIS)
 >>>>>>> ff8067635a4b01fe09b0b2c1834fbdd567d431fc
+=======
+>>>>>>> 1917283 (add 3000/6m options setpoints and pointnames)
 
         if not hasattr(self, '_module_images'):
             self._module_images = {}
@@ -741,6 +788,7 @@ class RackArea:
         photo = _load_photo(base_dir, "Measurement_Module.jpg", card_w, card_h,
                              label=f"DIS module slot {slot_num}")
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
@@ -751,6 +799,8 @@ class RackArea:
 =======
 >>>>>>> 66e928a (add setpoints in 3000/12M/DIS)
 >>>>>>> ff8067635a4b01fe09b0b2c1834fbdd567d431fc
+=======
+>>>>>>> 1917283 (add 3000/6m options setpoints and pointnames)
         if photo is not None:
             c.create_rectangle(sx1, sy1, sx2, sy2,
                                fill="#0a0e14", outline="",
@@ -758,6 +808,7 @@ class RackArea:
             c.create_image(sx1, sy1, image=photo, anchor="nw", tags=tag)
             self._module_images[key] = photo
         else:
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
@@ -785,6 +836,8 @@ class RackArea:
 =======
 >>>>>>> 66e928a (add setpoints in 3000/12M/DIS)
 >>>>>>> ff8067635a4b01fe09b0b2c1834fbdd567d431fc
+=======
+>>>>>>> 1917283 (add 3000/6m options setpoints and pointnames)
             c.create_rectangle(sx1, sy1, sx2, sy2,
                                fill="#1a4fa0", outline="",
                                width=0, tags=tag)
@@ -824,12 +877,23 @@ class RackArea:
         is_sel   = (self._selected == key)
         module   = self._slot_data.get(key)
 
+<<<<<<< HEAD
         if module and is_image_display_module(module):
             self._draw_detailed_module(c, L, slot_idx, module, is_sel, tag)
             return
 
+=======
+>>>>>>> 1917283 (add 3000/6m options setpoints and pointnames)
         if _is_relay_module(module):
             self._draw_relay_module(c, L, slot_idx, module, is_sel, tag)
+            return
+
+        if _is_6m_module(module):
+            self._draw_6m_module(c, L, slot_idx, module, is_sel, tag)
+            return
+
+        if module and is_image_display_module(module):
+            self._draw_detailed_module(c, L, slot_idx, module, is_sel, tag)
             return
 
         sw  = L["sw"]
@@ -842,6 +906,7 @@ class RackArea:
         mx  = (sx1 + sx2) // 2
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -851,6 +916,8 @@ class RackArea:
 =======
 >>>>>>> 66e928a (add setpoints in 3000/12M/DIS)
 >>>>>>> ff8067635a4b01fe09b0b2c1834fbdd567d431fc
+=======
+>>>>>>> 1917283 (add 3000/6m options setpoints and pointnames)
         base_dir = os.path.dirname(os.path.abspath(__file__))
 
         if not hasattr(self, '_no_module_images'):
@@ -863,6 +930,7 @@ class RackArea:
         if slot_num == 1:
             photo = _load_photo(base_dir, "Configuration_Module.jpg", slot_w, slot_h,
                                  label=f"configuration panel slot {slot_num}")
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
@@ -877,10 +945,13 @@ class RackArea:
 =======
 >>>>>>> 66e928a (add setpoints in 3000/12M/DIS)
 >>>>>>> ff8067635a4b01fe09b0b2c1834fbdd567d431fc
+=======
+>>>>>>> 1917283 (add 3000/6m options setpoints and pointnames)
         else:
             photo = _load_photo(base_dir, "NO_Module.jpg", slot_w, slot_h,
                                  label=f"empty slot {slot_num}")
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
@@ -891,6 +962,8 @@ class RackArea:
 =======
 >>>>>>> 66e928a (add setpoints in 3000/12M/DIS)
 >>>>>>> ff8067635a4b01fe09b0b2c1834fbdd567d431fc
+=======
+>>>>>>> 1917283 (add 3000/6m options setpoints and pointnames)
         if photo is not None:
             # Draw image directly without black background
             c.create_image(sx1, sy1, image=photo, anchor="nw", tags=tag)
@@ -904,6 +977,7 @@ class RackArea:
             else:
                 face_col = T["slot_face"]
                 edge_col = T["slot_edge_sh"]
+<<<<<<< HEAD
 <<<<<<< HEAD
 
             c.create_rectangle(sx1, sy1, sx2, sy2,
@@ -1014,6 +1088,30 @@ class RackArea:
 =======
 >>>>>>> 66e928a (add setpoints in 3000/12M/DIS)
 >>>>>>> ff8067635a4b01fe09b0b2c1834fbdd567d431fc
+=======
+
+            c.create_rectangle(sx1, sy1, sx2, sy2,
+                                fill=face_col,
+                                outline=edge_col,
+                                width=2,
+                                tags=tag)
+
+            cap_w = 22
+            cap_h = 8
+            c.create_rectangle(mx - cap_w // 2, sy1 + 8,
+                                mx + cap_w // 2, sy1 + 8 + cap_h,
+                                fill=T["slot_cap"] if not is_sel else "#fde68a",
+                                outline=edge_col,
+                                width=1, tags=tag)
+
+            panel_y1 = sy1 + 8 + cap_h + 8
+            panel_y2 = sy2 - 10
+            c.create_rectangle(sx1 + 6, panel_y1, sx2 - 6, panel_y2,
+                                fill=face_col,
+                                outline=edge_col,
+                                width=1, tags=tag)
+
+>>>>>>> 1917283 (add 3000/6m options setpoints and pointnames)
             if module:
                 short = module.split()[0]
                 c.create_text(mx, (panel_y1 + panel_y2) // 2,
@@ -1034,6 +1132,7 @@ class RackArea:
                                fill="", outline="#f0b040",
                                width=3, tags=tag)
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -1048,6 +1147,8 @@ class RackArea:
 =======
 >>>>>>> 66e928a (add setpoints in 3000/12M/DIS)
 >>>>>>> ff8067635a4b01fe09b0b2c1834fbdd567d431fc
+=======
+>>>>>>> 1917283 (add 3000/6m options setpoints and pointnames)
 
         c.tag_bind(tag, "<Enter>",
                    lambda e, t=tag, k=key: self._hover(t, k, True))
@@ -1079,6 +1180,7 @@ class RackArea:
             self._module_images = {}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -1088,6 +1190,8 @@ class RackArea:
 =======
 >>>>>>> 66e928a (add setpoints in 3000/12M/DIS)
 >>>>>>> ff8067635a4b01fe09b0b2c1834fbdd567d431fc
+=======
+>>>>>>> 1917283 (add 3000/6m options setpoints and pointnames)
         photo = _load_photo(base_dir, "VMM-6M.jpg", slot_w, slot_h,
                              label=f"VMM-6M slot {slot_num}")
 
@@ -1098,6 +1202,7 @@ class RackArea:
             c.create_image(sx1, sy1, image=photo, anchor="nw", tags=tag)
             self._module_images[key] = photo
         else:
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
@@ -1125,6 +1230,8 @@ class RackArea:
 =======
 >>>>>>> 66e928a (add setpoints in 3000/12M/DIS)
 >>>>>>> ff8067635a4b01fe09b0b2c1834fbdd567d431fc
+=======
+>>>>>>> 1917283 (add 3000/6m options setpoints and pointnames)
             c.create_rectangle(sx1, sy1, sx2, sy2,
                                fill="#1a4fa0", outline="",
                                width=0, tags=tag)
@@ -1169,6 +1276,7 @@ class RackArea:
             self._module_images = {}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -1178,6 +1286,8 @@ class RackArea:
 =======
 >>>>>>> 66e928a (add setpoints in 3000/12M/DIS)
 >>>>>>> ff8067635a4b01fe09b0b2c1834fbdd567d431fc
+=======
+>>>>>>> 1917283 (add 3000/6m options setpoints and pointnames)
         photo = _load_photo(base_dir, "Relay_Module.jpg", slot_w, slot_h,
                              label=f"Relay slot {slot_num}")
 
@@ -1188,6 +1298,7 @@ class RackArea:
             c.create_image(sx1, sy1, image=photo, anchor="nw", tags=tag)
             self._module_images[key] = photo
         else:
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
@@ -1215,6 +1326,8 @@ class RackArea:
 =======
 >>>>>>> 66e928a (add setpoints in 3000/12M/DIS)
 >>>>>>> ff8067635a4b01fe09b0b2c1834fbdd567d431fc
+=======
+>>>>>>> 1917283 (add 3000/6m options setpoints and pointnames)
             c.create_rectangle(sx1, sy1, sx2, sy2,
                                fill="#1a4fa0", outline="",
                                width=0, tags=tag)
@@ -1237,6 +1350,64 @@ class RackArea:
                    lambda e, k=key, s=slot_num: self._click(k, s))
         c.tag_bind(tag, "<Button-3>",
                    lambda e, k=key, s=slot_num: self._right_click(k, s, e))
+<<<<<<< HEAD
+=======
+
+    # ══════════════════════════════════════════════════════════════════
+    #  3000/6M — single-slot 6M module image card
+    # ══════════════════════════════════════════════════════════════════
+
+    def _draw_6m_module(self, c: tk.Canvas, L: dict, slot_idx: int,
+                       module: str, is_sel: bool, tag: str):
+        slot_num = slot_idx + 1
+        key      = f"0_{slot_num}"
+
+        sw     = L["sw"]
+        sx1    = int(L["slot_x0"] + slot_idx * sw + 3)
+        sx2    = int(sx1 + sw - 6)
+        sy1    = L["TOP_Y"] + 2
+        sy2    = L["TOP_Y"] + L["SHELL_H"] - 12
+        slot_w = max(1, sx2 - sx1)
+        slot_h = max(1, sy2 - sy1)
+
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+
+        if not hasattr(self, '_6m_images'):
+            self._6m_images = {}
+
+        photo = _load_photo(base_dir, "VMM-6M.jpg", slot_w, slot_h,
+                             label=f"6M slot {slot_num}")
+
+        if photo is not None:
+            c.create_rectangle(sx1, sy1, sx2, sy2,
+                               fill="#0a0e14", outline="",
+                               width=0, tags=tag)
+            c.create_image(sx1, sy1, image=photo, anchor="nw", tags=tag)
+            self._6m_images[key] = photo
+        else:
+            c.create_rectangle(sx1, sy1, sx2, sy2,
+                               fill="#5a8a5a", outline="",
+                               width=0, tags=tag)
+            c.create_text((sx1 + sx2) // 2, (sy1 + sy2) // 2,
+                          text="3000/6M",
+                          fill="#ffffff",
+                          font=tkfont.Font(family="Segoe UI", size=8, weight="bold"),
+                          anchor="center", tags=tag)
+
+        if is_sel:
+            c.create_rectangle(sx1, sy1, sx2, sy2,
+                               fill="", outline="#f0b040",
+                               width=3, tags=tag)
+
+        c.tag_bind(tag, "<Enter>",
+                   lambda e, t=tag, k=key: self._hover(t, k, True))
+        c.tag_bind(tag, "<Leave>",
+                   lambda e, t=tag, k=key: self._hover(t, k, False))
+        c.tag_bind(tag, "<Button-1>",
+                   lambda e, k=key, s=slot_num: self._click(k, s))
+        c.tag_bind(tag, "<Button-3>",
+                   lambda e, k=key, s=slot_num: self._right_click(k, s, e))
+>>>>>>> 1917283 (add 3000/6m options setpoints and pointnames)
 
     # ── Interaction ─────────────────────────────────────────────────
 
@@ -1265,21 +1436,30 @@ class RackArea:
 
     def _right_click(self, key: str, slot_num: int, event):
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 1917283 (add 3000/6m options setpoints and pointnames)
         """Handle right-click on DIS_MODULE and RELAY_MODULE to show context menu."""
         module = self._slot_data.get(key)
 
         # Show context menu for DIS_MODULE with Options, Setpoints, Point Names
+<<<<<<< HEAD
 =======
         """Handle right-click on DIS_MODULE to show context menu."""
         module = self._slot_data.get(key)
         
         # Only show context menu for DIS_MODULE
 >>>>>>> ff8067635a4b01fe09b0b2c1834fbdd567d431fc
+=======
+>>>>>>> 1917283 (add 3000/6m options setpoints and pointnames)
         if module == DIS_MODULE:
             def on_options(slot):
                 dialog = ProximityMonitor3000ConfigDialog(self._canvas, slot)
                 dialog.show()
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 1917283 (add 3000/6m options setpoints and pointnames)
 
             def on_setpoints(slot):
                 dialog = SetpointsDialog(self._canvas, self._fonts, slot)
@@ -1289,6 +1469,7 @@ class RackArea:
                 # TODO: Implement Point Names dialog
                 print(f"Point Names for slot {slot}")
 
+<<<<<<< HEAD
 =======
             
             def on_setpoints(slot):
@@ -1305,6 +1486,8 @@ class RackArea:
 >>>>>>> 66e928a (add setpoints in 3000/12M/DIS)
             
 >>>>>>> ff8067635a4b01fe09b0b2c1834fbdd567d431fc
+=======
+>>>>>>> 1917283 (add 3000/6m options setpoints and pointnames)
             context_menu = PointOptionsContextMenu(
                 self._canvas,
                 self._fonts,
@@ -1314,6 +1497,9 @@ class RackArea:
                 on_point_names=on_point_names
             )
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 1917283 (add 3000/6m options setpoints and pointnames)
 
             # Get screen coordinates for the menu
             x = event.x_root
@@ -1333,9 +1519,40 @@ class RackArea:
                 on_setpoints=on_setpoints
             )
 
+<<<<<<< HEAD
 =======
             
 >>>>>>> ff8067635a4b01fe09b0b2c1834fbdd567d431fc
+=======
+            # Get screen coordinates for the menu
+            x = event.x_root
+            y = event.y_root
+            context_menu.show(x, y)
+
+        # Show context menu for 3000/6M with Options, Setpoints, Point Names
+        elif _is_6m_module(module):
+            def on_options(slot):
+                dialog = SixMOptionsDialog(self._canvas, slot)
+                dialog.show()
+
+            def on_setpoints(slot):
+                # TODO: Implement 3000/6M Setpoints dialog
+                print(f"Setpoints for 3000/6M slot {slot}")
+
+            def on_point_names(slot):
+                # TODO: Implement 3000/6M Point Names dialog
+                print(f"Point Names for 3000/6M slot {slot}")
+
+            context_menu = PointOptionsContextMenu(
+                self._canvas,
+                self._fonts,
+                slot_num,
+                on_options=on_options,
+                on_setpoints=on_setpoints,
+                on_point_names=on_point_names
+            )
+
+>>>>>>> 1917283 (add 3000/6m options setpoints and pointnames)
             # Get screen coordinates for the menu
             x = event.x_root
             y = event.y_root
@@ -1354,6 +1571,9 @@ class RackArea:
 
     # Raw slots where a DIS module may start. DIS occupies (slot_num,
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 1917283 (add 3000/6m options setpoints and pointnames)
     # slot_num+1) — a sliding window, NOT fixed non-overlapping pairs.
     # Any raw slot from 2 up to SLOT_COUNT-1 is a valid start: raw slot 1
     # is reserved for Configuration Settings. Raw slot SLOT_COUNT (the
@@ -1371,6 +1591,7 @@ class RackArea:
     # Raw slot 12 (displayed as "11") is the last physical slot. If it is
     # selected directly (not as the tail of a DIS pair from raw slot 11),
     # only 3000/6M or Relay are permitted there.
+<<<<<<< HEAD
 =======
     # slot_num+1), so starting here keeps every pair within raw slots
     # 2-11 and never reaches raw slot 12.
@@ -1379,6 +1600,8 @@ class RackArea:
     # always remain standalone — only 3000/6M or Relay are permitted
     # there, and it can never become the tail of a DIS pair.
 >>>>>>> ff8067635a4b01fe09b0b2c1834fbdd567d431fc
+=======
+>>>>>>> 1917283 (add 3000/6m options setpoints and pointnames)
     _LAST_SLOT_RESTRICTED = 12
 
     @staticmethod
@@ -1395,6 +1618,7 @@ class RackArea:
         def on_selection(selection):
             current_module = self._slot_data.get(key)
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -1404,6 +1628,8 @@ class RackArea:
 =======
 >>>>>>> 66e928a (add setpoints in 3000/12M/DIS)
 >>>>>>> ff8067635a4b01fe09b0b2c1834fbdd567d431fc
+=======
+>>>>>>> 1917283 (add 3000/6m options setpoints and pointnames)
 
             # ── Rule: last slot (raw 12 / displayed 11) is restricted ──
             if slot_num == self._LAST_SLOT_RESTRICTED and not self._is_vmm_or_relay(selection):
@@ -1444,11 +1670,16 @@ class RackArea:
                 partner_key = f"0_{partner_num}"
                 partner_module = self._slot_data.get(partner_key)
 <<<<<<< HEAD
+<<<<<<< HEAD
                 # Allow DIS if partner slot is empty (None) or "No Modules"
                 if partner_module is not None and partner_module != "No Modules":
 =======
                 if partner_module is not None:
 >>>>>>> ff8067635a4b01fe09b0b2c1834fbdd567d431fc
+=======
+                # Allow DIS if partner slot is empty (None) or "No Modules"
+                if partner_module is not None and partner_module != "No Modules":
+>>>>>>> 1917283 (add 3000/6m options setpoints and pointnames)
                     from tkinter import messagebox
                     messagebox.showwarning(
                         "Module Selection",
@@ -1458,6 +1689,7 @@ class RackArea:
                     )
                     return
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
@@ -1470,6 +1702,8 @@ class RackArea:
 =======
 >>>>>>> 66e928a (add setpoints in 3000/12M/DIS)
 >>>>>>> ff8067635a4b01fe09b0b2c1834fbdd567d431fc
+=======
+>>>>>>> 1917283 (add 3000/6m options setpoints and pointnames)
             if current_module and selection != "No Modules" and current_module != selection:
                 def on_switch_confirmed(confirmed):
                     if confirmed:

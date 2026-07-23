@@ -8,6 +8,7 @@ Single self-contained file — no external theme.py required.
 import tkinter as tk
 import tkinter.font as tkfont
 <<<<<<< HEAD
+<<<<<<< HEAD
 from tkinter import messagebox
 =======
 <<<<<<< HEAD
@@ -24,6 +25,9 @@ from tkinter import messagebox, ttk
 from tkinter import messagebox
 >>>>>>> 66e928a (add setpoints in 3000/12M/DIS)
 >>>>>>> ff8067635a4b01fe09b0b2c1834fbdd567d431fc
+=======
+from tkinter import messagebox
+>>>>>>> 1917283 (add 3000/6m options setpoints and pointnames)
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -143,6 +147,7 @@ class DirectConnectDialog:
         }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -175,6 +180,8 @@ class DirectConnectDialog:
 =======
 >>>>>>> 66e928a (add setpoints in 3000/12M/DIS)
 >>>>>>> ff8067635a4b01fe09b0b2c1834fbdd567d431fc
+=======
+>>>>>>> 1917283 (add 3000/6m options setpoints and pointnames)
         self._create_dialog()
 
     def _f(self, key, family="Segoe UI", size=9, weight="normal"):
@@ -253,6 +260,7 @@ class DirectConnectDialog:
 
         self._field(grp, "Connect Password :", "connect_password", pw=True)
 <<<<<<< HEAD
+<<<<<<< HEAD
         self._field_with_browse(grp, "Rack Address :", "rack_address")
         self._field(grp, "COM Port :", "com_port", pw=False)
         self._field(grp, "Baud Rate :", "baud_rate", pw=False)
@@ -279,6 +287,11 @@ class DirectConnectDialog:
         self._field(grp, "Baud Rate :", "baud_rate", pw=False)
 >>>>>>> 66e928a (add setpoints in 3000/12M/DIS)
 >>>>>>> ff8067635a4b01fe09b0b2c1834fbdd567d431fc
+=======
+        self._field_with_browse(grp, "Rack Address :", "rack_address")
+        self._field(grp, "COM Port :", "com_port", pw=False)
+        self._field(grp, "Baud Rate :", "baud_rate", pw=False)
+>>>>>>> 1917283 (add 3000/6m options setpoints and pointnames)
 
     def _field(self, parent, label_text, key, *, pw):
         row = tk.Frame(parent, bg=T["win_bg"])
@@ -326,6 +339,7 @@ class DirectConnectDialog:
         entry.bind("<Leave>", _on_leave)
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -368,6 +382,8 @@ class DirectConnectDialog:
 =======
 >>>>>>> 66e928a (add setpoints in 3000/12M/DIS)
 >>>>>>> ff8067635a4b01fe09b0b2c1834fbdd567d431fc
+=======
+>>>>>>> 1917283 (add 3000/6m options setpoints and pointnames)
     def _field_with_browse(self, parent, label_text, key):
         """Field with Browse button for Rack Address."""
         row = tk.Frame(parent, bg=T["win_bg"])

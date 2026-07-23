@@ -82,6 +82,7 @@ class VMS3000(tk.Tk):
             "open":             self._cmd_open,
             "save":             self._cmd_save,
 <<<<<<< HEAD
+<<<<<<< HEAD
             "save_as":          self._cmd_save_as,
 =======
 <<<<<<< HEAD
@@ -98,6 +99,9 @@ class VMS3000(tk.Tk):
             "save_as":          self._cmd_save_as,
 >>>>>>> 66e928a (add setpoints in 3000/12M/DIS)
 >>>>>>> ff8067635a4b01fe09b0b2c1834fbdd567d431fc
+=======
+            "save_as":          self._cmd_save_as,
+>>>>>>> 1917283 (add 3000/6m options setpoints and pointnames)
             "direct_connect":   self._cmd_direct_connect,
             "network_connect":  self._cmd_network_connect,
             "disconnect":       self._cmd_disconnect,
@@ -198,10 +202,14 @@ class VMS3000(tk.Tk):
 
     def _cmd_open(self):
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 1917283 (add 3000/6m options setpoints and pointnames)
         self._rack.load_configuration()
 
     def _cmd_save(self):
         self._rack.save_configuration()
+<<<<<<< HEAD
 =======
         dialog = LoadConfigDialog(self, self.F)
         file_path = dialog.show()
@@ -216,6 +224,8 @@ class VMS3000(tk.Tk):
             # TODO: Add logic to save the configuration data to the selected file
             messagebox.showinfo("Save Configuration", f"Configuration saved to:\n{file_path}", parent=self)
 >>>>>>> ff8067635a4b01fe09b0b2c1834fbdd567d431fc
+=======
+>>>>>>> 1917283 (add 3000/6m options setpoints and pointnames)
 
     def _cmd_save_as(self):
         messagebox.showinfo("Save As", "Save As ready.", parent=self)
