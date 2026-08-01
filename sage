@@ -1,0 +1,29 @@
+* [33m66e928a[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m add setpoints in 3000/12M/DIS
+[31m|[m *   [33mb1c131a[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Resolved merge
+[31m|[m [32m|[m[33m\[m  
+[31m|[m [32m|[m *   [33m30cb68c[m Merged remote repository
+[31m|[m [32m|[m [34m|[m[35m\[m  
+[31m|[m [32m|[m [34m|[m *   [33maae1306[m Resolved merge conflicts using remote version
+[31m|[m [32m|[m [34m|[m [36m|[m[1;31m\[m  
+[31m|[m [32m|[m [34m|[m [36m|[m * [33m20022fa[m add rack_area
+[31m|[m [32m|[m [34m|[m [36m|[m * [33m1ccc726[m add exit print save open
+[31m|[m [32m|[m [34m|[m [36m|[m * [33m350306d[m access local files
+[31m|[m [32m|[m[31m_[m[34m|[m[31m_[m[36m|[m[31m/[m  
+[31m|[m[31m/[m[32m|[m [34m|[m [36m|[m   
+[31m|[m [32m|[m [34m|[m * [33m150891b[m add configiration_settings
+[31m|[m [32m|[m[31m_[m[34m|[m[31m/[m  
+[31m|[m[31m/[m[32m|[m [34m|[m   
+[31m|[m [32m|[m * [33mfb600a9[m rack_area config logic work correctly
+[31m|[m [32m|[m[31m/[m  
+[31m|[m[31m/[m[32m|[m   
+[31m|[m * [33m0b899f0[m add setoptions
+[31m|[m[31m/[m  
+* [33md11afff[m remove border i racks
+* [33ma153c97[m replace ha number 2 to 1
+* [33mf6938c5[m display a confirmation message
+* [33m42c56d5[m add toolbar sidebar menubar and rackconfiguation
+* [33m2617c95[m ui folder alaram file add return file
+* [33mfbdd421[m configuration file
+* [33m1233a8e[m add modbus feilds
+* [33m254cd63[m add models each function code
+* [33m261f09e[m add structure
