@@ -24,6 +24,7 @@ from points.channel_configuration import ChannelConfigurationDialog
 # ══════════════════════════════════════════════════════════════════════════
 
 C = {
+<<<<<<< HEAD
     "win_bg":          "#b7c9de",   # pale steel-blue dialog background
     "titlebar":        "#1f5a9e",   # navy-blue titlebar
     "titlebar_text":   "#ffffff",
@@ -49,6 +50,34 @@ C = {
 
     "text":            "#000000",
     "text_dim":        "#33455c",
+=======
+    "win_bg":          "#f0f0f0",   # pale grey dialog background (matches Channel-N Configuration)
+    "titlebar":        "#1a3a5c",   # navy titlebar (matches Channel-N Configuration)
+    "titlebar_text":   "#ffffff",
+    "close_bg":        "#c0392b",
+
+    "group_bg":        "#f0f0f0",
+    "group_border":    "#8a8f98",
+    "group_label":     "#000000",
+
+    "field_bg":        "#eef1f5",   # SLOT / RACK TYPE / CONFIG ID display box
+    "field_border":    "#6b7280",
+
+    "combo_white_bg":  "#ffffff",   # Slot I/O Module Type dropdown
+    "combo_white_fg":  "#1a3a8c",
+
+    "combo_sel_bg":    "#1a3a5c",   # highlighted "Radial Vibration" look (navy, from Channel-N titlebar)
+    "combo_sel_fg":    "#ffffff",
+
+    "btn_face":        "#e7e9ec",
+    "btn_hover":       "#f2f4f6",
+    "btn_press":       "#cfd4da",
+    "btn_border":      "#5a5a5a",
+    "btn_disabled_fg": "#8895a6",
+
+    "text":            "#000000",
+    "text_dim":        "#4a5568",
+>>>>>>> ebbb8b3 (fix option arrow)
 
     "vms_logo":        "#17408a",
 }
@@ -72,12 +101,20 @@ class ProximityMonitor3000ConfigDialog:
         self._config_id = config_id
         self._dialog    = None
 
+<<<<<<< HEAD
     def _f(self, key, family=FONT_NAME, size=9, weight="normal"):
+=======
+    def _f(self, key, family=FONT_NAME, size=9, weight="normal", slant="roman"):
+>>>>>>> ebbb8b3 (fix option arrow)
         if not isinstance(self._fonts, dict):
             self._fonts = {}
         font = self._fonts.get(key)
         if font is None:
+<<<<<<< HEAD
             font = tkfont.Font(family=family, size=size, weight=weight)
+=======
+            font = tkfont.Font(family=family, size=size, weight=weight, slant=slant)
+>>>>>>> ebbb8b3 (fix option arrow)
             self._fonts[key] = font
         return font
 
@@ -118,7 +155,12 @@ class ProximityMonitor3000ConfigDialog:
         self._create_buttons(body)
 
         self._dialog.update_idletasks()
+<<<<<<< HEAD
         w, h = 820, 400
+=======
+        w = max(960, self._dialog.winfo_reqwidth())
+        h = self._dialog.winfo_reqheight()
+>>>>>>> ebbb8b3 (fix option arrow)
         sw = self._dialog.winfo_screenwidth()
         sh = self._dialog.winfo_screenheight()
         self._dialog.geometry(f"{w}x{h}+{(sw - w) // 2}+{(sh - h) // 2}")
@@ -183,7 +225,11 @@ class ProximityMonitor3000ConfigDialog:
 
         tk.Button(
             bar, text="\u2715", font=self._f("close", size=8),
+<<<<<<< HEAD
             bg="#c0392b", fg="#ffffff", bd=1, relief="raised",
+=======
+            bg=C["close_bg"], fg="#ffffff", bd=1, relief="raised",
+>>>>>>> ebbb8b3 (fix option arrow)
             width=3, command=self._on_cancel,
         ).pack(side="right", padx=4, pady=3)
 
@@ -297,12 +343,18 @@ class ProximityMonitor3000ConfigDialog:
         box = self._group(parent, name)
 
         var = tk.BooleanVar(value=True)
+<<<<<<< HEAD
         tk.Checkbutton(
+=======
+
+        chk = tk.Checkbutton(
+>>>>>>> ebbb8b3 (fix option arrow)
             box, text="Active", variable=var,
             bg=C["win_bg"], fg=C["text"],
             activebackground=C["win_bg"], activeforeground=C["text"],
             selectcolor="#ffffff",
             font=self._f("field", size=9),
+<<<<<<< HEAD
         ).pack(anchor="w", pady=(0, 8))
 
         self._raised_btn(
@@ -310,6 +362,34 @@ class ProximityMonitor3000ConfigDialog:
             lambda: self._on_options(channel_num, var),
             width=10
         ).pack(pady=(0, 4))
+=======
+        )
+        chk.pack(anchor="w", pady=(0, 8))
+
+        options_btn = self._raised_btn(
+            box, "Options",
+            lambda: self._on_options(channel_num, var),
+            width=10
+        )
+        options_btn.pack(pady=(0, 4))
+
+        def _apply_active_state(*_):
+            """Grey out the whole channel box (title, checkbox label,
+            Options button) when Active is unchecked — matches the
+            reference screenshot's disabled 'Channel 1' look exactly."""
+            active = var.get()
+            state = "normal" if active else "disabled"
+            color = C["text"] if active else C["btn_disabled_fg"]
+            box.config(fg=color)
+            chk.config(fg=color, state="normal")  # checkbox itself stays clickable
+            options_btn.config(
+                state=state,
+                cursor="hand2" if active else "arrow",
+            )
+
+        var.trace_add("write", _apply_active_state)
+        _apply_active_state()
+>>>>>>> ebbb8b3 (fix option arrow)
 
         return box
 
@@ -329,9 +409,14 @@ class ProximityMonitor3000ConfigDialog:
             width=width, state="normal" if enabled else "disabled",
             cursor="hand2" if enabled else "arrow",
         )
+<<<<<<< HEAD
         if enabled:
             b.bind("<Enter>", lambda e: b.config(bg=C["btn_hover"]))
             b.bind("<Leave>", lambda e: b.config(bg=C["btn_face"]))
+=======
+        b.bind("<Enter>", lambda e: b.config(bg=C["btn_hover"]) if str(b["state"]) == "normal" else None)
+        b.bind("<Leave>", lambda e: b.config(bg=C["btn_face"]))
+>>>>>>> ebbb8b3 (fix option arrow)
         return b
 
     # ------------------------------------------------------------------ #

@@ -1,6 +1,7 @@
 """
 sixm_option.py — VMS 3000  •  3000/6M Options Configuration Dialog
 
+<<<<<<< HEAD
 Exact visual match to the Proximity Monitor 3000 Configuration reference
 screenshot (proximiter12m_ridial.py), adapted for the 3000/6M module's
 2 channels instead of 4:
@@ -10,6 +11,23 @@ screenshot (proximiter12m_ridial.py), adapted for the 3000/6M module's
   - "Slot Input / Output Module Type" group with a plain white dropdown
   - "Channel Pair Type" combobox shown with the blue highlighted
     selection look ("Radial Vibration"), matching the screenshot
+=======
+Exact visual match to the "Proximity Monitor 3000 Configuration" reference
+screenshot, adapted for the 3000/6M module's 2 channels instead of 4:
+  - pale steel-grey window background
+  - dark navy titlebar with red close button
+  - flat, thin-bordered white display fields for SLOT / RACK TYPE /
+    CONFIGURATION ID (no group-box borders anywhere — every section
+    header is a plain bold label sitting above its control, exactly
+    like the screenshot)
+  - "Slot Input / Output Module Type" — bold label + plain white dropdown,
+    no surrounding border box
+  - "Channel Pair Type" — bold label right-aligned above a full-width,
+    solid navy combobox bar with white text ("Radial Vibration")
+  - Channel boxes (Channel 1 / Channel 2) — bold label above a thin
+    rectangular border containing an "Active" checkbox and an "Options"
+    button
+>>>>>>> ebbb8b3 (fix option arrow)
   - classic raised, beveled buttons (Ok, Options, Copy, arrows, etc.)
   - bold blue-navy italic "VMS 3000" logo, bottom right
 """
@@ -18,12 +36,18 @@ import tkinter as tk
 from tkinter import ttk
 import tkinter.font as tkfont
 
+<<<<<<< HEAD
+=======
+from points.channel_configuration import ChannelConfigurationDialog
+
+>>>>>>> ebbb8b3 (fix option arrow)
 
 # ══════════════════════════════════════════════════════════════════════════
 #  PALETTE — colours matched from the reference screenshot
 # ══════════════════════════════════════════════════════════════════════════
 
 C = {
+<<<<<<< HEAD
     "win_bg":          "#b7c9de",   # pale steel-blue dialog background
     "titlebar":        "#1f5a9e",   # navy-blue titlebar
     "titlebar_text":   "#ffffff",
@@ -49,6 +73,35 @@ C = {
 
     "text":            "#000000",
     "text_dim":        "#33455c",
+=======
+    "win_bg":          "#f0f0f0",   # pale grey dialog background
+    "titlebar":        "#1a3a5c",   # navy titlebar
+    "titlebar_text":   "#ffffff",
+    "close_bg":        "#c0392b",
+
+    "group_label":     "#000000",
+
+    "field_bg":        "#ffffff",   # SLOT / RACK TYPE / CONFIG ID display box
+    "field_border":    "#8a8f98",
+
+    "box_bg":          "#f0f0f0",   # Channel N thin-border box background
+    "box_border":      "#8a8f98",
+
+    "combo_white_bg":  "#ffffff",   # Slot I/O Module Type dropdown
+    "combo_white_fg":  "#1a3a8c",
+
+    "combo_sel_bg":    "#1a3a5c",   # full-width navy "Channel Pair Type" bar
+    "combo_sel_fg":    "#ffffff",
+
+    "btn_face":        "#e7e9ec",
+    "btn_hover":       "#f2f4f6",
+    "btn_press":       "#cfd4da",
+    "btn_border":      "#5a5a5a",
+    "btn_disabled_fg": "#8895a6",
+
+    "text":            "#000000",
+    "text_dim":        "#4a5568",
+>>>>>>> ebbb8b3 (fix option arrow)
 
     "vms_logo":        "#17408a",
 }
@@ -57,15 +110,25 @@ FONT_NAME = "Segoe UI"
 
 
 class SixMOptionsDialog:
+<<<<<<< HEAD
     """Configuration dialog for a 3000/6M Module (VMS 3000) — same visual
     design as ProximityMonitor3000ConfigDialog, sized for 2 channels."""
+=======
+    """Configuration dialog for a 3000/6M Module (VMS 3000) — pixel-matched
+    to the reference "Proximity Monitor 3000 Configuration" screenshot,
+    scaled down to 2 channels."""
+>>>>>>> ebbb8b3 (fix option arrow)
 
     # ------------------------------------------------------------------ #
     #  Init — slot_num is the 2nd positional arg, fonts is optional/safe  #
     # ------------------------------------------------------------------ #
 
     def __init__(self, parent, slot_num=6, fonts=None,
+<<<<<<< HEAD
                  rack_type="", config_id=""):
+=======
+                 rack_type="VMM/6M/DISP", config_id=""):
+>>>>>>> ebbb8b3 (fix option arrow)
         self._parent    = parent
         self._slot_num  = slot_num
         self._fonts     = fonts if isinstance(fonts, dict) else {}
@@ -73,12 +136,20 @@ class SixMOptionsDialog:
         self._config_id = config_id
         self._dialog    = None
 
+<<<<<<< HEAD
     def _f(self, key, family=FONT_NAME, size=9, weight="normal"):
+=======
+    def _f(self, key, family=FONT_NAME, size=9, weight="normal", slant="roman"):
+>>>>>>> ebbb8b3 (fix option arrow)
         if not isinstance(self._fonts, dict):
             self._fonts = {}
         font = self._fonts.get(key)
         if font is None:
+<<<<<<< HEAD
             font = tkfont.Font(family=family, size=size, weight=weight)
+=======
+            font = tkfont.Font(family=family, size=size, weight=weight, slant=slant)
+>>>>>>> ebbb8b3 (fix option arrow)
             self._fonts[key] = font
         return font
 
@@ -104,17 +175,38 @@ class SixMOptionsDialog:
         self._create_identity_row(body)
 
         pair_row = tk.Frame(body, bg=C["win_bg"])
+<<<<<<< HEAD
         pair_row.pack(fill="both", expand=True, pady=(10, 0))
         pair_row.columnconfigure(0, weight=1)
 
         self._build_channel_pair_group(
             pair_row, "Channel 1 and 2", "Channel 1", "Channel 2"
         ).grid(row=0, column=0, sticky="nsew")
+=======
+        pair_row.pack(fill="both", expand=True, pady=(14, 0))
+        pair_row.columnconfigure(0, weight=1)
+        pair_row.columnconfigure(2, weight=1)
+
+        self._build_channel_pair_group(
+            pair_row, "Channel Pair 1 and 2", "Channel 1", "Channel 2", 1, 2
+        ).grid(row=0, column=0, sticky="nsew", padx=(0, 10))
+
+        tk.Frame(pair_row, bg=C["box_border"], width=1).grid(row=0, column=1, sticky="ns")
+
+        self._build_channel_pair_group(
+            pair_row, "Channel Pair 3 and 4", "Channel 3", "Channel 4", 3, 4
+        ).grid(row=0, column=2, sticky="nsew", padx=(10, 0))
+>>>>>>> ebbb8b3 (fix option arrow)
 
         self._create_buttons(body)
 
         self._dialog.update_idletasks()
+<<<<<<< HEAD
         w, h = 460, 400
+=======
+        w = max(960, self._dialog.winfo_reqwidth())
+        h = self._dialog.winfo_reqheight()
+>>>>>>> ebbb8b3 (fix option arrow)
         sw = self._dialog.winfo_screenwidth()
         sh = self._dialog.winfo_screenheight()
         self._dialog.geometry(f"{w}x{h}+{(sw - w) // 2}+{(sh - h) // 2}")
@@ -146,6 +238,7 @@ class SixMOptionsDialog:
                   fieldbackground=[("readonly", C["combo_white_bg"])],
                   foreground=[("readonly", C["combo_white_fg"])])
 
+<<<<<<< HEAD
         # Blue "selected" combobox — used for "Channel Pair Type"
         style.configure(
             "Selected6M.TCombobox",
@@ -161,6 +254,24 @@ class SixMOptionsDialog:
         style.map("Selected6M.TCombobox",
                   fieldbackground=[("readonly", C["combo_sel_bg"])],
                   foreground=[("readonly", C["combo_sel_fg"])])
+=======
+        # Solid navy "Channel Pair Type" bar — full width, highlighted look
+        style.configure(
+            "Selected6M.TCombobox",
+            fieldbackground=C["combo_sel_bg"],
+            background=C["combo_sel_bg"],
+            foreground=C["combo_sel_fg"],
+            arrowcolor=C["combo_sel_fg"],
+            bordercolor=C["field_border"],
+            lightcolor=C["combo_sel_bg"],
+            darkcolor=C["combo_sel_bg"],
+            padding=4,
+        )
+        style.map("Selected6M.TCombobox",
+                  fieldbackground=[("readonly", C["combo_sel_bg"])],
+                  foreground=[("readonly", C["combo_sel_fg"])],
+                  arrowcolor=[("readonly", C["combo_sel_fg"])])
+>>>>>>> ebbb8b3 (fix option arrow)
 
     # ------------------------------------------------------------------ #
     #  Titlebar                                                            #
@@ -173,17 +284,26 @@ class SixMOptionsDialog:
 
         tk.Label(
             bar, text="  3000/6M Options Configuration",
+<<<<<<< HEAD
             font=self._f("title", size=10, weight="bold"),
+=======
+            font=self._f("title", size=11, weight="bold"),
+>>>>>>> ebbb8b3 (fix option arrow)
             bg=C["titlebar"], fg=C["titlebar_text"], anchor="w",
         ).pack(side="left", fill="both", expand=True)
 
         tk.Button(
             bar, text="\u2715", font=self._f("close", size=8),
+<<<<<<< HEAD
             bg="#c0392b", fg="#ffffff", bd=1, relief="raised",
+=======
+            bg=C["close_bg"], fg="#ffffff", bd=1, relief="raised",
+>>>>>>> ebbb8b3 (fix option arrow)
             width=3, command=self._on_cancel,
         ).pack(side="right", padx=4, pady=3)
 
     # ------------------------------------------------------------------ #
+<<<<<<< HEAD
     #  Group-box helper                                                    #
     # ------------------------------------------------------------------ #
 
@@ -195,6 +315,16 @@ class SixMOptionsDialog:
             bd=1, relief="groove",
             highlightbackground=C["group_border"],
             padx=10, pady=8,
+=======
+    #  Section header helper — bold plain label, NOT a group-box border    #
+    # ------------------------------------------------------------------ #
+
+    def _section_label(self, parent, title, anchor="w"):
+        return tk.Label(
+            parent, text=title,
+            font=self._f("label_b", size=9, weight="bold"),
+            bg=C["win_bg"], fg=C["group_label"], anchor=anchor,
+>>>>>>> ebbb8b3 (fix option arrow)
         )
 
     # ------------------------------------------------------------------ #
@@ -212,19 +342,35 @@ class SixMOptionsDialog:
         self._display_field(left, "RACK TYPE:", self._rack_type, width=14, col=1)
         self._display_field(left, "CONFIGURATION ID:", self._config_id, width=14, col=2)
 
+<<<<<<< HEAD
         right = self._group(row, "Slot Input / Output Module Type")
         right.pack(side="right", fill="x", expand=True, padx=(30, 0))
 
+=======
+        right = tk.Frame(row, bg=C["win_bg"])
+        right.pack(side="right", fill="x", expand=True, padx=(30, 0))
+
+        self._section_label(right, "Slot Input / Output Module Type").pack(anchor="w")
+
+>>>>>>> ebbb8b3 (fix option arrow)
         combo = ttk.Combobox(
             right, values=["3000/6M Module"],
             font=self._f("field", size=9), state="readonly",
             style="White6M.TCombobox",
         )
         combo.set("3000/6M Module")
+<<<<<<< HEAD
         combo.pack(fill="x", padx=2, pady=2)
 
     def _display_field(self, parent, label_text, value, width, col):
         """Flat sunken display box (SLOT / RACK TYPE / CONFIGURATION ID)."""
+=======
+        combo.pack(fill="x", padx=2, pady=(2, 0))
+
+    def _display_field(self, parent, label_text, value, width, col):
+        """Flat, thin-bordered white display box (SLOT / RACK TYPE /
+        CONFIGURATION ID) — matches the reference exactly."""
+>>>>>>> ebbb8b3 (fix option arrow)
         cell = tk.Frame(parent, bg=C["win_bg"])
         cell.grid(row=0, column=col, padx=(0, 16), sticky="w")
 
@@ -237,9 +383,14 @@ class SixMOptionsDialog:
             cell, text=value, bg=C["field_bg"], fg=C["text"],
             font=self._f("field", size=9),
             width=width, anchor="w",
+<<<<<<< HEAD
             relief="sunken", bd=2,
             highlightthickness=1, highlightbackground=C["field_border"],
             padx=4, pady=2,
+=======
+            relief="solid", bd=1,
+            padx=4, pady=3,
+>>>>>>> ebbb8b3 (fix option arrow)
         )
         box.pack(anchor="w", pady=(2, 0))
 
@@ -247,6 +398,7 @@ class SixMOptionsDialog:
     #  Channel Pair group                                                  #
     # ------------------------------------------------------------------ #
 
+<<<<<<< HEAD
     def _build_channel_pair_group(self, parent, title, ch_a_name, ch_b_name):
         group = self._group(parent, title)
 
@@ -259,11 +411,27 @@ class SixMOptionsDialog:
 
         pair_type_combo = ttk.Combobox(
             type_row,
+=======
+    def _build_channel_pair_group(self, parent, title, ch_a_name, ch_b_name,
+                                   ch_a_num, ch_b_num):
+        group = tk.Frame(parent, bg=C["win_bg"])
+
+        # Header row: pair title (left) + "Channel Pair Type" (right)
+        header = tk.Frame(group, bg=C["win_bg"])
+        header.pack(fill="x")
+        self._section_label(header, title).pack(side="left")
+        self._section_label(header, "Channel Pair Type", anchor="e").pack(side="right")
+
+        # Full-width solid-navy combobox bar
+        pair_type_combo = ttk.Combobox(
+            group,
+>>>>>>> ebbb8b3 (fix option arrow)
             values=["Radial Vibration", "Axial Vibration", "Thrust Position", "Not Used"],
             font=self._f("field", size=9), state="readonly",
             style="Selected6M.TCombobox",
         )
         pair_type_combo.set("Radial Vibration")
+<<<<<<< HEAD
         pair_type_combo.pack(fill="x")
 
         body = tk.Frame(group, bg=C["win_bg"])
@@ -298,6 +466,88 @@ class SixMOptionsDialog:
         self._raised_btn(box, "Options", lambda: self._on_options(name), width=10).pack(pady=(0, 4))
 
         return box
+=======
+        pair_type_combo.pack(fill="x", pady=(2, 6))
+
+        body = tk.Frame(group, bg=C["win_bg"])
+        body.pack(fill="both", expand=True)
+        body.columnconfigure(0, weight=1)
+        body.columnconfigure(2, weight=1)
+
+        self._build_channel_box(body, ch_a_name, ch_a_num).grid(row=0, column=0, sticky="nsew", padx=(0, 8))
+
+        mid = tk.Frame(body, bg=C["win_bg"])
+        mid.grid(row=0, column=1, sticky="n")
+        self._raised_btn(mid, "\u21d2", None, width=3, enabled=False).pack(pady=(28, 4))
+        self._raised_btn(mid, "Copy", None, width=8).pack(pady=4)
+        self._raised_btn(mid, "\u21d0", None, width=3, enabled=False).pack(pady=(4, 0))
+
+        self._build_channel_box(body, ch_b_name, ch_b_num).grid(row=0, column=2, sticky="nsew", padx=(8, 0))
+
+        arrows_row = tk.Frame(group, bg=C["win_bg"])
+        arrows_row.pack(pady=(6, 0))
+        self._raised_btn(arrows_row, "\u21d2", None, width=3, enabled=False).pack(pady=2)
+        self._raised_btn(arrows_row, "\u21d0", None, width=3, enabled=False).pack(pady=2)
+
+        return group
+
+    def _build_channel_box(self, parent, name, channel_num):
+        """Bold label above a thin rectangular border — matches the
+        reference's "Channel 1" / "Channel 2" boxes exactly (label sits
+        outside the border, not baked into it)."""
+        wrap = tk.Frame(parent, bg=C["win_bg"])
+
+        self._section_label(wrap, name).pack(anchor="w", pady=(0, 4))
+
+        box = tk.Frame(
+            wrap, bg=C["box_bg"],
+            highlightthickness=1, highlightbackground=C["box_border"],
+            bd=0,
+        )
+        box.pack(fill="both", expand=True)
+
+        inner = tk.Frame(box, bg=C["box_bg"], padx=10, pady=10)
+        inner.pack(fill="both", expand=True)
+
+        name_label = wrap.winfo_children()[0]
+
+        var = tk.BooleanVar(value=True)
+
+        chk = tk.Checkbutton(
+            inner, text="Active", variable=var,
+            bg=C["box_bg"], fg=C["text"],
+            activebackground=C["box_bg"], activeforeground=C["text"],
+            selectcolor="#ffffff",
+            font=self._f("field", size=9),
+        )
+        chk.pack(anchor="w", pady=(0, 8))
+
+        options_btn = self._raised_btn(
+            inner, "Options",
+            lambda: self._on_options(channel_num, var),
+            width=10
+        )
+        options_btn.pack(anchor="w")
+
+        def _apply_active_state(*_):
+            """Grey out the whole channel box (title, checkbox label,
+            Options button) when Active is unchecked — matches the
+            reference screenshot's disabled 'Channel 1' look exactly."""
+            active = var.get()
+            state = "normal" if active else "disabled"
+            color = C["text"] if active else C["btn_disabled_fg"]
+            name_label.config(fg=color)
+            chk.config(fg=color, state="normal")  # checkbox itself stays clickable
+            options_btn.config(
+                state=state,
+                cursor="hand2" if active else "arrow",
+            )
+
+        var.trace_add("write", _apply_active_state)
+        _apply_active_state()
+
+        return wrap
+>>>>>>> ebbb8b3 (fix option arrow)
 
     # ------------------------------------------------------------------ #
     #  Classic raised, beveled button                                      #
@@ -315,9 +565,14 @@ class SixMOptionsDialog:
             width=width, state="normal" if enabled else "disabled",
             cursor="hand2" if enabled else "arrow",
         )
+<<<<<<< HEAD
         if enabled:
             b.bind("<Enter>", lambda e: b.config(bg=C["btn_hover"]))
             b.bind("<Leave>", lambda e: b.config(bg=C["btn_face"]))
+=======
+        b.bind("<Enter>", lambda e: b.config(bg=C["btn_hover"]) if str(b["state"]) == "normal" else None)
+        b.bind("<Leave>", lambda e: b.config(bg=C["btn_face"]))
+>>>>>>> ebbb8b3 (fix option arrow)
         return b
 
     # ------------------------------------------------------------------ #
@@ -349,8 +604,26 @@ class SixMOptionsDialog:
     #  Handlers                                                            #
     # ------------------------------------------------------------------ #
 
+<<<<<<< HEAD
     def _on_options(self, channel_name):
         print(f"Open options for {channel_name}")
+=======
+    def _on_options(self, channel_num, active_var=None):
+        """
+        Open the Channel-N Configuration dialog (exact match to the
+        Channel-1 .. Channel-4 reference screenshots) for the given
+        channel, pre-filled with this module's slot and rack type.
+        """
+        dialog = ChannelConfigurationDialog(
+            self._dialog,
+            channel_num,
+            slot_num=self._slot_num,
+            fonts=self._fonts,
+            rack_type=self._rack_type,
+            active=active_var.get() if active_var is not None else True,
+        )
+        dialog.show()
+>>>>>>> ebbb8b3 (fix option arrow)
 
     def _on_ok(self):
         print("OK pressed")
